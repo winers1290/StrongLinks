@@ -8,7 +8,7 @@ class PostComment extends Model
 {
     public function Replies()
     {
-        return $this->hasMany('App\PostCommentReply');
+        return $this->hasMany('App\PostCommentReply', 'comment_id');
     }
     
     public function User()

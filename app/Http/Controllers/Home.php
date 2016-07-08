@@ -20,13 +20,13 @@ class Home extends Controller
     {
         if(Auth::check())
         {
-            return view('stream');
+            return Redirect::to('/stream');
         }
-        
         else
         {
             return view('login');
         }
+        
     }
     
     public function Logout()
@@ -74,7 +74,7 @@ class Home extends Controller
             
             if(Auth::attempt($UserData))
             {
-                return view('stream');
+                return Redirect::to('/stream');
             }
             
             else
@@ -86,4 +86,7 @@ class Home extends Controller
             }
         }
     }
+
+    
+
 }

@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
         factory(App\PostComment::class, 1000)->create();
         factory(App\PostCommentReply::class, 500)->create();
         factory(App\PostEmotion::class, 500)->create();
+        factory(App\PostReaction::class, 500)->create();
         
         $emotions = [
             'Anger',
@@ -41,8 +42,8 @@ class DatabaseSeeder extends Seeder
         
         foreach($emotions as $emotion)
         {
-            DB:table('emotions')->insert([
-                'value'         =>  $emotion,
+            DB::table('emotions')->insert([
+                'emotion'         =>  $emotion,
                 'description'   => 'test',
             ]);
         }

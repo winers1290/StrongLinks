@@ -76,6 +76,15 @@ $factory->define(App\PostEmotion::class, function (Faker\Generator $faker) {
     
 });
 
+$factory->define(App\PostReaction::class, function (Faker\Generator $faker) {
+   
+    return [
+        'post_id'          => rand(1,500),
+        'user_id'       => rand(1,50),
+        'emotion_id'       => rand(1,5),
+    ];
+    
+});
 
 $factory->define(App\CBT::class, function (Faker\Generator $faker) {
    
