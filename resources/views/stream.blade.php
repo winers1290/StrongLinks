@@ -82,9 +82,12 @@ no more posts
 @endsection
 
 @section('create')
+
+@include('common.errors')
+
 <form action="{{url('/create')}}" method="POST">
 {{ csrf_field() }}
-<textarea class="create-box" placeholder="Tell us something..."></textarea>
+<textarea class="create-box" placeholder="Tell us something..." name="content"></textarea>
 <br>
 <input type="submit" name="submit" value="Submit" class="create-box">
 

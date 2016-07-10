@@ -12,7 +12,7 @@
 */
 
 
-    
+    Route::get('/logout', 'Home@Logout');
     Route::get('/', 'Home@Landing');
     
     Route::get('/stream/{offset?}', 'Stream@CreateStream');
@@ -30,4 +30,4 @@
 
 Route::post('/', 'Home@Login');
 
-Route::get('/logout', 'Home@Logout');
+

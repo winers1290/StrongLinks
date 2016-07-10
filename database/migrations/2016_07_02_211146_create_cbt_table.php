@@ -16,6 +16,9 @@ class CreateCbtTable extends Migration
             $table->increments('id');
 	    $table->integer('user_id');
 	    $table->string('situation');
+        $table->integer('privacy');
+        $table->integer('general');
+        $table->integer('general_after');
             $table->timestamps();
         });
     }

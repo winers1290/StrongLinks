@@ -6,7 +6,7 @@
  "settings": {
   "m_runAs": 0,
   "m_phpExe": "/usr/bin/php",
-  "m_indexFile": "/home/james/Laravel/StrongLinks/resources/views/stream.blade.php",
+  "m_indexFile": "/home/james/Laravel/StrongLinks/app/Http/Controllers/Create.php",
   "m_args": "",
   "m_workingDirectory": "",
   "m_projectURL": "",

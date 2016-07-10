@@ -90,9 +90,54 @@ $factory->define(App\CBT::class, function (Faker\Generator $faker) {
    
     return [
         'situation'     => $faker->text(100),
+        'privacy'       => rand(1,3),
+        'general'       => rand(1,10),
+        'general_after'       => rand(1,10),
     ];
     
 });
+
+$factory->define(App\CBTEvidence::class, function (Faker\Generator $faker) {
+   
+    return [
+        'cbt_id'     => rand(1,50),
+        'supportive'       => rand(0,1),
+        'evidence'       => $faker->text(35),
+    ];
+    
+});
+
+$factory->define(App\CBTAutomaticThought::class, function (Faker\Generator $faker) {
+   
+    return [
+        'cbt_id'     => rand(1,50),
+        'thought'       => $faker->text(rand(100,150)),
+        'severity'       => rand(1,100),
+        'severity_after'    => rand(1,100),
+    ];
+    
+});
+
+$factory->define(App\CBTRationalThought::class, function (Faker\Generator $faker) {
+   
+    return [
+        'cbt_id'     => rand(1,50),
+        'thought'   => $faker->text(rand(100,150)),
+    ];
+    
+});
+
+$factory->define(App\CBTEmotion::class, function (Faker\Generator $faker) {
+   
+    return [
+        'cbt_id'     => rand(1,50),
+        'emotion_id'   => rand(1,5),
+        'severity'   => rand(1,10),
+        'severity_after'   => rand(1,10),
+    ];
+    
+});
+
 
 
 

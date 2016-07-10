@@ -28,8 +28,12 @@ class DatabaseSeeder extends Seeder
         factory(App\Name::class, 1000)->create();
         factory(App\PostComment::class, 1000)->create();
         factory(App\PostCommentReply::class, 500)->create();
-        factory(App\PostEmotion::class, 500)->create();
+        factory(App\PostEmotion::class, 1000)->create();
         factory(App\PostReaction::class, 500)->create();
+        factory(App\CBTEvidence::class, 500)->create();
+        factory(App\CBTAutomaticThought::class, 500)->create();
+        factory(App\CBTRationalThought::class, 500)->create();
+        factory(App\CBTEmotion::class, 500)->create();
         
         $emotions = [
             'Anger',
