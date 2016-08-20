@@ -12,17 +12,39 @@
     <i>Comments: {{$Event['Post']['total_comments']}}</i>
     <i>Reactions: {{$Event['Post']['total_reactions']}}</i>
     <i>Created: {{$Event['Post']['friendly_time']}}</i>
+    
     @if(isset($Event['Post']['Emotions']))
     @foreach($Event['Post']['Emotions'] as $Emotion) <!-- For each emotion on post -->
-    <p>Emotion: {{$Emotion['Emotion']['emotion']}} Severity: {{$Emotion['severity']}}</p>
+        <p>Emotion: {{$Emotion['Emotion']['emotion']}} Severity: {{$Emotion['severity']}}</p>
     @endforeach 
     @endif
 
     @if(isset($Event['Post']['Reactions']))
-    @foreach($Event['Post']['Reactions'] as $Reaction)
-    <p>Reaction: &#64{{$Reaction['User']['Username']}} Emotion: {{$Reaction['Emotion']['emotion']}}</p>
+    @foreach($Event['Post']['Reactions'] as $Reaction_em)   
+        @foreach($Reaction_em as $Reaction)
+        <p>Reaction: &#64{{$Reaction['User']['Username']}} Emotion: {{$Reaction['Emotion']['emotion']}}</p>
+        @endforeach
     @endforeach
     @endif
+    
+    
+    @foreach($Emotions as $emotion)
+        
+        @if(isset($Event['Post']['Reactions']) && isset($Event['Post']['Reactions'][$emotion]))
+        @foreach($Event['Post']['Reactions'][$emotion] as $event)
+            @if($event['user_id'] == Auth::id())
+            <span><a style="color:red" href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></span>
+            @else
+            <span ><a style="color:green" href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></span>   
+            @endif
+        @endforeach
+        
+        @else
+            <span><a style="color:green" href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></span>
+        @endif
+        
+    @endforeach
+
 
     <p>{{$Event['Post']['content']}}</p>
 </p>

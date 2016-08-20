@@ -106,12 +106,13 @@ class Post extends Model
             foreach($PostReactions as $Reaction)
             {
                 $reactionProfile = $this->MakeNiceUser($Reaction->User);
-                $UserPosts[$i]['Post']['Reactions'][$c] = $Reaction->getAttributes();
-                $UserPosts[$i]['Post']['Reactions'][$c]['User'] = $reactionProfile;
-                $UserPosts[$i]['Post']['Reactions'][$c]['Emotion'] = $Reaction->Emotion->getAttributes();
+                $UserPosts[$i]['Post']['Reactions'][$Reaction->Emotion->emotion][$c] = $Reaction->getAttributes();
+                $UserPosts[$i]['Post']['Reactions'][$Reaction->Emotion->emotion][$c]['User'] = $reactionProfile;
+                $UserPosts[$i]['Post']['Reactions'][$Reaction->Emotion->emotion][$c]['Emotion'] = $Reaction->Emotion->getAttributes();
                 
                 $c++;
             }
+            
             
             foreach($PostComments as $Comment)
             {
@@ -157,6 +158,7 @@ class Post extends Model
     {
         
         $niceProfile = [
+            'id'            =>  $User->id,
             'FirstName'     =>  $User->Profile->FirstName->name,
             'LastName'      =>  $User->Profile->LastName->name,
             'Picture'       =>  $User->Profile->picture,
