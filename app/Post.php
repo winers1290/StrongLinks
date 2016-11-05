@@ -35,8 +35,8 @@ class Post extends Model
 		if($userID != null)
 		{
 			$posts = \DB::table('posts')
-						->select("id", "created_at", \DB::raw("'post' as source")
-						->where("user_id", $userID));
+						->select("id", "created_at", \DB::raw("'post' as source"))
+						->where("user_id", $userID);
 							
 			$posts_cbt = \DB::table('cbt')
 						->select("id", "created_at", \DB::raw("'cbt' as source"))
