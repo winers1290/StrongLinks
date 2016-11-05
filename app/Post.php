@@ -122,99 +122,100 @@ class Post extends Model
             return NULL;
         }
 
-        
-        //Set iteration values
-        $i = 0;
-        $a = 0;
-        $b = 0;
-        $c = 0;
-        $d = 0;
-
         foreach($Posts as $Post)
         {
 			if(get_class($Post) == "App\\Post")
 			{
 				$NiceProfile = $this->MakeNiceUser($Post->User);
-				$UserPosts[$i]['Post'] = $Post->getAttributes();
-				$UserPosts[$i]['Post']['User'] = $NiceProfile;
-				$UserPosts[$i]['Post']['friendly_time'] = $this->generateFriendlyTime($UserPosts[$i]['Post']['created_at']);
-				
+								
 				$PostEmotions = $Post->Emotions;
 				foreach($PostEmotions as $Emotion)
 				{
-					$UserPosts[$i]['Post']['Emotions'][$d] = $Emotion->getAttributes();
-					$UserPosts[$i]['Post']['Emotions'][$d]['Emotion'] = $Emotion->Emotion->getAttributes();
-					
-					$d++;
+					$Emotions[] = $Emotion->getAttributes();
+					$key = key($Emotions);
+					$Emotions[$key]['Emotion'] = $Emotion->Emotion->getAttributes();
+					next($Emotions);					
 				}
 				
-				$d = 0;
 				$PostComments = \App\PostComment::where('post_id', $Post->id)->orderBy('created_at', 'desc')->take(10)->get();
 				$totalComments = \App\PostComment::where('post_id', $Post->id)->count();
 				
 				$PostReactions = \App\PostReaction::where('post_id', $Post->id)->orderBy('created_at', 'desc')->take(10)->get();
-				$UserPosts[$i]['Post']['total_reactions'] = \App\PostReaction::where('post_id', $Post->id)->count();
-
-				$UserPosts[$i]['Post']['total_comments'] = $totalComments;
+				$totalReactions = \App\PostReaction::where('post_id', $Post->id)->count();
 				
 				foreach($PostReactions as $Reaction)
 				{
-					$reactionProfile = $this->MakeNiceUser($Reaction->User);
-					$UserPosts[$i]['Post']['Reactions'][$Reaction->Emotion->emotion][$c] = $Reaction->getAttributes();
-					$UserPosts[$i]['Post']['Reactions'][$Reaction->Emotion->emotion][$c]['User'] = $reactionProfile;
-					$UserPosts[$i]['Post']['Reactions'][$Reaction->Emotion->emotion][$c]['Emotion'] = $Reaction->Emotion->getAttributes();
-					
-					$c++;
+					$Reactions[$Reaction->Emotion->emotion][] = $Reaction->getAttributes();
+					$key = key($Reactions[$Reaction->Emotion->emotion]);
+					$Reactions[$Reaction->Emotion->emotion][$key]['User'] = $this->MakeNiceUser($Reaction->User);
+					$Reactions[$Reaction->Emotion->emotion][$key]['Emotion'] = $Reaction->Emotion->getAttributes();
+					next($Reactions[$Reaction->Emotion->emotion]);
 				}
 				
+				if(!isset($Reactions))
+				{
+					$Reactions = NULL;
+				}
 				
 				foreach($PostComments as $Comment)
 				{
 					$commentProfile = $this->MakeNiceUser($Comment->User);
-					
-					$UserPosts[$i]['Post']['Comments'][$a] = $Comment->getAttributes();
-					$UserPosts[$i]['Post']['Comments'][$a]['User'] = $commentProfile;
-					$UserPosts[$i]['Post']['Comments'][$a]['friendly_time'] = $this->generateFriendlyTime($UserPosts[$i]['Post']['Comments'][$a]['created_at']);
-					
 					$totalReplies = \App\PostCommentReply::where('comment_id', $Comment->id)->count();
 					$CommentReplies = \App\PostCommentReply::where('comment_id', $Comment->id)->orderBy('created_at', 'desc')->take(10)->get();
-					
-					$UserPosts[$i]['Post']['Comments'][$a]['total_replies'] = $totalReplies;
 					
 					foreach($CommentReplies as $Reply)
 					{
 						$replyProfile = $this->MakeNiceUser($Reply->User);
-
-						$UserPosts[$i]['Post']['Comments'][$a]['Replies'][$b] = $Reply->getAttributes();
-						$UserPosts[$i]['Post']['Comments'][$a]['Replies'][$b]['User'] = $replyProfile;
 						
-						$UserPosts[$i]['Post']['Comments'][$a]['Replies'][$b]['friendly_time'] = $this->generateFriendlyTime($UserPosts[$i]['Post']['Comments'][$a]['Replies'][$b]['created_at']);
-
-						
-						$b++;
+						$Replies[] = $Reply->getAttributes();
+						$key = key($Replies);
+						$Replies[$key]['friendly_time'] = $this->generateFriendlyTime($Reply->created_at->format('Y-m-d H:i:s'));
+						$Replies[$key]['User'] = $replyProfile;
+						next($Replies);
 					}
 					
-					$a++;
-					$b = 0;
-					$c = 0;
+					if(!isset($Replies))
+					{
+						$Replies = NULL;
+					}
 					
+					$Comments[] = $Comment->getAttributes();
+					$key = key($Comments);
+					$Comments[$key]['friendly_time'] = $this->generateFriendlyTime($Comment->created_at->format('Y-m-d H:i:s'));
+					$Comments[$key]['total_replies'] = $totalReplies;
+					$Comments[$key]['User'] = $commentProfile;
+					$Comments[$key]['Replies'] = $Replies;
+					next($Comments);
+					
+					$Replies = NULL;
 				}
 				
-				$a = 0;
-				$i++;
+				if(!isset($Comments))
+				{
+					$Comments = NULL;
+				}
+	
+				$UserPosts[]['Post'] = $Post->getAttributes();
+				$key = key($UserPosts);
+				$UserPosts[$key]['Post']['User'] = $NiceProfile;
+				$UserPosts[$key]['Post']['friendly_time'] = $this->generateFriendlyTime($Post->created_at->format('Y-m-d H:i:s'));
+				$UserPosts[$key]['Post']['Emotions'] = $Emotions;
+				$UserPosts[$key]['Post']['total_reactions'] = $totalReactions;
+				$UserPosts[$key]['Post']['total_comments'] = $totalComments;
+				$UserPosts[$key]['Post']['Reactions'] = $Reactions;
+				$UserPosts[$key]['Post']['Comments'] = $Comments;
+				next($UserPosts);
+			
+				$Emotions = NULL;
+				$Comments = NULL;
+				$Reactions = NULL;
+
 			}
 			else
 			{
 				$NiceProfile = $this->MakeNiceUser($Post->User);
-				print_r($NiceProfile);
 			}
 		}
-            
-        
-		echo "<pre>";
-		//print_r();
-		echo "</pre>";
-		
          return $UserPosts;
     }
     

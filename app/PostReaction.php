@@ -8,8 +8,13 @@ class PostReaction extends Model
 {
     public function User()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User', 'user_id');
     }
+	
+	public function Profile()
+	{
+		return $this->belongsTo('App\Profile', 'user_id');
+	}
     
     public function Emotion()
     {
