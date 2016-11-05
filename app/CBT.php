@@ -7,6 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class CBT extends Model
 {
     protected $table = 'cbt';
+	
+	public function User()
+	{
+		return $this->belongsTo('App\User', 'user_id');
+	}
+	
+	public function Profile()
+	{
+		return $this->belongsTo('App\Profile', 'user_id');
+	}
     
     public function Emotions()
     {

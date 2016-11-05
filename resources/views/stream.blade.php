@@ -5,7 +5,10 @@
 <h1>Welcome!</h1>
 
 @if(count($Stream) > 0)
-@foreach($Stream as $Event) <!-- For each post -->
+	
+@foreach($Stream as $key => $Event) <!-- For each post -->
+
+@if(array_key_exists("Post", $Event))
 <div class="col-md-12">
 <p>
     <b><a href="{{url('/')}}/{{{$Event['Post']['User']['Username']}}}">&#64{{$Event['Post']['User']['Username']}}</a></b>
@@ -92,6 +95,13 @@ View more comments <b>({{$Event['Post']['total_comments'] - 10}})</b>
 </div>
 </div>
 
+@else <!-- CBT -->
+mddsfsdf
+
+@endif
+
+
+
 @endforeach
 
 <p><b>View more posts</b></p>
@@ -141,3 +151,4 @@ no more posts
 
 
 @endsection
+

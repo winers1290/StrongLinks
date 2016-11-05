@@ -11,7 +11,7 @@
   "m_workingDirectory": "",
   "m_projectURL": "",
   "m_includePath": "",
-  "m_ccIncludePath": "",
+  "m_ccIncludePath": "/home/james/.codelite/php-plugin/cc",
   "m_flags": 5,
   "m_phpIniFile": "",
   "m_fileMapping": []
