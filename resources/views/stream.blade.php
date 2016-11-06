@@ -2,25 +2,45 @@
 
 @section('content')
 
+<div class="row">
 <h1>Welcome!</h1>
+</div>
 
-@if(count($Stream) > 0)
+@if(count($Stream) > 0) <!-- If there are posts to show -->
 	
-@foreach($Stream as $key => $Event) <!-- For each post -->
+@foreach($Stream as $key => $Event) <!-- For each item in stream -->
 
-@if(array_key_exists("Post", $Event))
+<div class="row">
+<div class="col-sm-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+
+<div class="panel panel-default">
+<div class="panel-body">
+
+@if(array_key_exists("Post", $Event)) <!-- if the item is a regular post -->
 <div class="col-md-12">
-<p>
+<div>
     <b><a href="{{url('/')}}/{{{$Event['Post']['User']['Username']}}}">&#64{{$Event['Post']['User']['Username']}}</a></b>
-    <i>Comments: {{$Event['Post']['total_comments']}}</i>
-    <i>Reactions: {{$Event['Post']['total_reactions']}}</i>
-    <i>Created: {{$Event['Post']['friendly_time']}}</i>
     
-    @if(isset($Event['Post']['Emotions']))
-    @foreach($Event['Post']['Emotions'] as $Emotion) <!-- For each emotion on post -->
-        <p>Emotion: {{$Emotion['Emotion']['emotion']}} Severity: {{$Emotion['severity']}}</p>
-    @endforeach 
-    @endif
+	<p>
+		<span>{{$Event['Post']['friendly_time']}}</span>
+		
+		<!-- list emotions -->
+		@if(isset($Event['Post']['Emotions']))
+		@foreach($Event['Post']['Emotions'] as $Emotion) <!-- For each emotion on post -->
+			<span class="post-emotion {{$Emotion['Emotion']['emotion']}}-{{$Emotion['severity']}}">
+			{{$Emotion['Emotion']['emotion']}}
+			@if(!($loop->last))
+				&nbsp;
+			@endif;
+			</span>
+		@endforeach 
+		@endif
+		<!-- post emotions end -->
+	</p>
+
+	<hr>
+    
+
 
     @if(isset($Event['Post']['Reactions']))
     @foreach($Event['Post']['Reactions'] as $Reaction_em)   
@@ -50,7 +70,16 @@
 
 
     <p>{{$Event['Post']['content']}}</p>
-</p>
+	
+	<p>	
+	<i class="material-icons">comment</i>
+		<span>{{$Event['Post']['total_comments']}}</span>
+		
+    <i class="material-icons">link</i>
+		<span>{{$Event['Post']['total_reactions']}}</span>
+	</p>
+	
+</div>
 
 
 @if(isset($Event['Post']['Comments']))
@@ -95,14 +124,20 @@ View more comments <b>({{$Event['Post']['total_comments'] - 10}})</b>
 </div>
 </div>
 
-@else <!-- CBT -->
+@else <!-- else, if it is a CBT stream event -->
 mddsfsdf
 
-@endif
+@endif <!-- if(count($Stream) > 0) -->
+
+</div> <!-- Panel body -->
+</div> <!-- Panel -->
+
+</div> <!-- col-sm-12 col-md-8 md-offset-2 col-lg-6 col-lg-offet-3 -->
+</div> <!-- row -->
+
+@endforeach <!-- Foreach Stream Item -->
 
 
-
-@endforeach
 
 <p><b>View more posts</b></p>
 
