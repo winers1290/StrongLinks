@@ -216,6 +216,7 @@ class Post extends Model
 				$NiceProfile = $this->MakeNiceUser($Post->User);
 			}
 		}
+
          return $UserPosts;
     }
     

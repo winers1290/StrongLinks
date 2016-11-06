@@ -19,19 +19,29 @@
 @if(array_key_exists("Post", $Event)) <!-- if the item is a regular post -->
 <div class="col-md-12">
 <div>
-    <b><a href="{{url('/')}}/{{{$Event['Post']['User']['Username']}}}">&#64{{$Event['Post']['User']['Username']}}</a></b>
+    <b>
+	<a href="{{url('/')}}/{{{$Event['Post']['User']['Username']}}}">
+	&#64{{$Event['Post']['User']['Username']}}
+
+	</a>
+	</b>
+	
+	
     
 	<p>
-		<span>{{$Event['Post']['friendly_time']}}</span>
+		<span>{{$Event['Post']['friendly_time']}} | </span>
+    <i class="material-icons">link</i>
+		<span>{{$Event['Post']['total_reactions']}}</span>
 		
 		<!-- list emotions -->
 		@if(isset($Event['Post']['Emotions']))
 		@foreach($Event['Post']['Emotions'] as $Emotion) <!-- For each emotion on post -->
-			<span class="post-emotion {{$Emotion['Emotion']['emotion']}}-{{$Emotion['severity']}}">
-			{{$Emotion['Emotion']['emotion']}}
+			<span class="post-emotion {{$Emotion['Emotion']['emotion']}} severity-{{$Emotion['severity']}}">
 			@if(!($loop->last))
-				&nbsp;
-			@endif;
+				&nbsp
+			@endif
+			{{$Emotion['Emotion']['emotion']}}
+
 			</span>
 		@endforeach 
 		@endif
@@ -51,69 +61,97 @@
     @endif
     
     
+
+
+
+    <p>{{$Event['Post']['content']}}</p>
+	
+	<div class="reaction-wrapper">
     @foreach($Emotions as $emotion)
         
         @if(isset($Event['Post']['Reactions']) && isset($Event['Post']['Reactions'][$emotion]))
         @foreach($Event['Post']['Reactions'][$emotion] as $event)
             @if($event['user_id'] == Auth::id())
-            <span><a style="color:red" href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></span>
-            @else
-            <span ><a style="color:green" href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></span>   
-            @endif
+				<div class="emotion-box {{$emotion}} active"><a href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></div>
+				@break;
+			@else
+				<div class="emotion-box {{$emotion}}"><a href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></div>   
+				@break;
+			@endif
         @endforeach
         
         @else
-            <span><a style="color:green" href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></span>
+            <div class="emotion-box {{$emotion}}"><a href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></div>
         @endif
         
     @endforeach
-
-
-    <p>{{$Event['Post']['content']}}</p>
+	</div>
+	
+	<hr>
 	
 	<p>	
-	<i class="material-icons">comment</i>
-		<span>{{$Event['Post']['total_comments']}}</span>
+	
 		
-    <i class="material-icons">link</i>
-		<span>{{$Event['Post']['total_reactions']}}</span>
+		
+
 	</p>
 	
 </div>
 
+<div class="panel-group" id="comments-wrapper-{{$Event['Post']['id']}}" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingThree">
+      <h4 class="panel-title">
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#comments-{{$Event['Post']['id']}}" href="#comments-{{$Event['Post']['id']}}" aria-expanded="false" aria-controls="comments-{{$Event['Post']['id']}}">
+          <i class="material-icons">comment</i>Comments <span>({{$Event['Post']['total_comments']}})</span>
+        </a>
+      </h4>
+    </div>
+    
+	<div id="comments-{{$Event['Post']['id']}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+      <div class="panel-body">
 
-@if(isset($Event['Post']['Comments']))
-@foreach($Event['Post']['Comments'] as $Comment)
-<div class="col-md-10">
-<p>
-<a href="{{url('/')}}/{{$Comment['User']['Username']}}">
-&#64{{$Comment['User']['Username']}} 
-</a>
-Replies: {{$Comment['total_replies']}} Created: {{$Comment['friendly_time']}}
-<br>
-{{$Comment['comment']}}
-</p>
+		@if(isset($Event['Post']['Comments']))
+		@foreach($Event['Post']['Comments'] as $Comment)
+		<div class="col-md-10">
+		<p>
+		<a href="{{url('/')}}/{{$Comment['User']['Username']}}">
+		&#64{{$Comment['User']['Username']}} 
+		</a>
+		Replies: {{$Comment['total_replies']}} Created: {{$Comment['friendly_time']}}
+		<br>
+		{{$Comment['comment']}}
+		</p>
+		</div>
+
+
+
+		@if(isset($Comment['Replies']))
+		@foreach($Comment['Replies'] as $Reply)
+		<div class="col-md-8 col-md-offset-1">
+		<p>
+		<a href="{{url('/')}}/{{$Reply['User']['Username']}}">
+		&#64{{$Reply['User']['Username']}}
+		</a>
+		 Created: {{$Reply['friendly_time']}}
+		<br>
+		{{$Reply['comment']}}
+		</div>
+		@endforeach
+		@endif
+
+
+		@endforeach
+		@endif
+
+
+      </div>
+    </div>
+	
+  </div>
 </div>
 
 
-
-@if(isset($Comment['Replies']))
-@foreach($Comment['Replies'] as $Reply)
-<div class="col-md-8 col-md-offset-1">
-<p>
-<a href="{{url('/')}}/{{$Reply['User']['Username']}}">
-&#64{{$Reply['User']['Username']}}
-</a>
- Created: {{$Reply['friendly_time']}}
-<br>
-{{$Reply['comment']}}
-</div>
-@endforeach
-@endif
-
-
-@endforeach
-@endif
 
 
 

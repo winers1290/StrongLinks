@@ -17,7 +17,7 @@ class Stream extends Controller
         $Emotions = \App\Emotion::all();
         foreach($Emotions as $Emotion)
         {
-            $Data['Emotions'][] = $Emotion->emotion; 
+            $Data['Emotions'][] = $Emotion->active; 
         }
                 
         return view('stream', $Data);

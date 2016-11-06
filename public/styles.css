@@ -1,3 +1,7 @@
+/* Love */
+@import url('https://fonts.googleapis.com/css?family=Lovers+Quarrel');
+
+
 textarea.create-box,
 input.create-box,
 select.create-box
@@ -10,4 +14,152 @@ select.create-box
 .post-emotion
 {
 	float: right;
+    vertical-align: middle;
+	line-height: 2rem;
+}
+
+/*
+	Emotions
+*/
+.Anger
+{
+	color: red;
+}
+
+div.Anger.active
+{
+	background-color: red;
+}
+
+div.Grief
+{
+	background-color: blue;
+}
+
+div.Grief.active
+{
+	background-color: blue;
+}
+
+.Love
+{
+	color: purple;
+}
+
+div.Love.active
+{
+	background-color: purple;
+}
+
+.Hate
+{
+	color: black;
+	display: none !important;
+}
+
+div.Hate.active
+{
+	background-color: black;
+	display: none;
+}
+
+.Fear
+{
+	color: grey;
+}
+
+div.Fear.active
+{
+	background-color: grey;
+}
+
+.Joy
+{
+	color: orange;
+}
+
+div.Joy.active
+{
+	background-color: orange;
+}
+
+
+
+.severity-1
+{
+	font-size: 1rem;
+}
+
+.severity-2
+{
+	font-size: 1.2rem;
+}
+
+.severity-3
+{
+	font-size: 1.3rem;
+}
+
+.severity-4
+{
+	font-size: 1.4rem;
+}
+
+.severity-5
+{
+	font-size: 1.5rem;
+}
+
+.severity-6
+{
+	font-size: 1.6rem;
+	font-weight: bold;
+}
+
+.severity-7
+{
+	font-size: 1.7rem;
+	font-weight: bold;
+}
+
+.severity-8
+{
+	font-size: 1.8rem;
+	font-weight: bold;
+}
+
+.severity-9
+{
+	font-size: 1.9rem;
+	font-weight: bold;
+}
+
+.severity-10
+{
+	font-size: 2rem;
+	font-weight: bold;
+}
+
+div.emotion-box
+{
+	width:19%;
+	line-height: 40px;
+	text-align: center;
+	position:static;
+	color: white;
+	display: inline-block;
+	background-color: grey;
+}
+
+div.emotion-box *
+{
+	color: white;
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+div.reaction-wrapper
+{
+	width: 100%;
+	height: 40px;
 }
