@@ -12,22 +12,29 @@ class Stream extends Controller
     {
         $Stream = new \App\Post;
         $Data['Stream'] = $Stream->Stream(FALSE, $offset, NULL);
-        
+
         //Page Variables
         $Emotions = \App\Emotion::all();
         foreach($Emotions as $Emotion)
         {
-            $Data['Emotions'][] = $Emotion->active; 
+            $Data['Emotions'][] = $Emotion->active;
+            echo "<pre>";
+            echo $Emotion;
+            echo "</pre>";
         }
-                
+
+        //echo "<pre>";
+        //print_r($Data['emotions']);
+        //echo "</pre>";
+
         return view('stream', $Data);
     }
-    
+
     public function ProfilePagination($offset = 0)
     {
         return $this->Profile(NULL, $offset);
     }
-    
+
     public function Profile($username = NULL, $offset = 0)
     {
         $Stream = new \App\Post;
@@ -39,14 +46,14 @@ class Stream extends Controller
         {
             $Data['Stream'] = $Stream->Stream(FALSE, $offset, $username);
         }
-        
+
         //Page Variables
         $Emotions = \App\Emotion::all();
         foreach($Emotions as $Emotion)
         {
-            $Data['Emotions'][] = $Emotion->emotion; 
+            $Data['Emotions'][] = $Emotion->emotion;
         }
-        
+
         return view('stream', $Data);
     }
 }

@@ -13,31 +13,31 @@ class Post extends Model
     {
         return $this->hasMany('App\PostReaction');
     }
-    
+
     public function Emotions()
     {
         return $this->hasMany('App\PostEmotion');
     }
-    
+
     public function Comments()
     {
         return $this->hasMany('App\PostComment');
     }
-    
+
     public function User()
     {
         return $this->belongsTo('App\User');
     }
-	
+
 	public function StreamData($offset, $userID = null)
 	{
-				
+
 		if($userID != null)
 		{
 			$posts = \DB::table('posts')
 						->select("id", "created_at", \DB::raw("'post' as source"))
 						->where("user_id", $userID);
-							
+
 			$posts_cbt = \DB::table('cbt')
 						->select("id", "created_at", \DB::raw("'cbt' as source"))
 						->where("user_id", $userID)
@@ -46,13 +46,13 @@ class Post extends Model
 						->skip($offset * 10)
 						->limit(10)
 						->get();
-		}	
-					
+		}
+
 		else
 		{
 			$posts = \DB::table('posts')
 						->select("id", "created_at", \DB::raw("'post' as source"));
-							
+
 			$posts_cbt = \DB::table('cbt')
 						->select("id", "created_at", \DB::raw("'cbt' as source"))
 						->union($posts)
@@ -61,7 +61,7 @@ class Post extends Model
 						->limit(10)
 						->get();
 		}
-			
+
 		foreach($posts_cbt as $item)
 		{
 			switch($item->source)
@@ -69,22 +69,22 @@ class Post extends Model
 				case "post":
 					$model = "\App\\Post";
 					break;
-					
+
 				case "cbt":
 					$model = "\App\\CBT";
 					break;
 			}
-			
+
 			$items[] = $model::where('id', $item->id)->first();
 		}
-		
+
 		return $items;
 	}
-    
+
     public function Stream($profile = FALSE, $offset = 0, $userID = NULL)
-    { 
+    {
         if($profile === TRUE)
-        {     
+        {
             $User = Auth::user();
             $Posts = $this->StreamData($offset, $User->id);
 
@@ -112,10 +112,10 @@ class Post extends Model
             {
                 $TargetUser = $userID;
             }
-              
-            $Posts = $this->StreamData($offset, $TargetUser);  
+
+            $Posts = $this->StreamData($offset, $TargetUser);
         }
-        
+
         //Check posts exist
         if(count($Posts) < 1)
         {
@@ -127,22 +127,30 @@ class Post extends Model
 			if(get_class($Post) == "App\\Post")
 			{
 				$NiceProfile = $this->MakeNiceUser($Post->User);
-								
+
 				$PostEmotions = $Post->Emotions;
-				foreach($PostEmotions as $Emotion)
-				{
-					$Emotions[] = $Emotion->getAttributes();
-					$key = key($Emotions);
-					$Emotions[$key]['Emotion'] = $Emotion->Emotion->getAttributes();
-					next($Emotions);					
-				}
-				
+        if(count($PostEmotions) > 0)
+        {
+          foreach($PostEmotions as $Emotion)
+  				{
+  					$Emotions[] = $Emotion->getAttributes();
+  					$key = key($Emotions);
+  					$Emotions[$key]['Emotion'] = $Emotion->Emotion->getAttributes();
+  					next($Emotions);
+  				}
+        }
+        else
+        {
+            $Emotions[] = NULL;
+        }
+
+
 				$PostComments = \App\PostComment::where('post_id', $Post->id)->orderBy('created_at', 'desc')->take(10)->get();
 				$totalComments = \App\PostComment::where('post_id', $Post->id)->count();
-				
+
 				$PostReactions = \App\PostReaction::where('post_id', $Post->id)->orderBy('created_at', 'desc')->take(10)->get();
 				$totalReactions = \App\PostReaction::where('post_id', $Post->id)->count();
-				
+
 				foreach($PostReactions as $Reaction)
 				{
 					$Reactions[$Reaction->Emotion->emotion][] = $Reaction->getAttributes();
@@ -151,34 +159,34 @@ class Post extends Model
 					$Reactions[$Reaction->Emotion->emotion][$key]['Emotion'] = $Reaction->Emotion->getAttributes();
 					next($Reactions[$Reaction->Emotion->emotion]);
 				}
-				
+
 				if(!isset($Reactions))
 				{
 					$Reactions = NULL;
 				}
-				
+
 				foreach($PostComments as $Comment)
 				{
 					$commentProfile = $this->MakeNiceUser($Comment->User);
 					$totalReplies = \App\PostCommentReply::where('comment_id', $Comment->id)->count();
 					$CommentReplies = \App\PostCommentReply::where('comment_id', $Comment->id)->orderBy('created_at', 'desc')->take(10)->get();
-					
+
 					foreach($CommentReplies as $Reply)
 					{
 						$replyProfile = $this->MakeNiceUser($Reply->User);
-						
+
 						$Replies[] = $Reply->getAttributes();
 						$key = key($Replies);
 						$Replies[$key]['friendly_time'] = $this->generateFriendlyTime($Reply->created_at->format('Y-m-d H:i:s'));
 						$Replies[$key]['User'] = $replyProfile;
 						next($Replies);
 					}
-					
+
 					if(!isset($Replies))
 					{
 						$Replies = NULL;
 					}
-					
+
 					$Comments[] = $Comment->getAttributes();
 					$key = key($Comments);
 					$Comments[$key]['friendly_time'] = $this->generateFriendlyTime($Comment->created_at->format('Y-m-d H:i:s'));
@@ -186,15 +194,15 @@ class Post extends Model
 					$Comments[$key]['User'] = $commentProfile;
 					$Comments[$key]['Replies'] = $Replies;
 					next($Comments);
-					
+
 					$Replies = NULL;
 				}
-				
+
 				if(!isset($Comments))
 				{
 					$Comments = NULL;
 				}
-	
+
 				$UserPosts[]['Post'] = $Post->getAttributes();
 				$key = key($UserPosts);
 				$UserPosts[$key]['Post']['User'] = $NiceProfile;
@@ -205,12 +213,17 @@ class Post extends Model
 				$UserPosts[$key]['Post']['Reactions'] = $Reactions;
 				$UserPosts[$key]['Post']['Comments'] = $Comments;
 				next($UserPosts);
-			
+
 				$Emotions = NULL;
 				$Comments = NULL;
 				$Reactions = NULL;
 
+
+
 			}
+
+
+
 			else
 			{
 				$NiceProfile = $this->MakeNiceUser($Post->User);
@@ -219,7 +232,7 @@ class Post extends Model
 
          return $UserPosts;
     }
-    
+
     private function MakeNiceUser($User)
     {
         $niceProfile = [
@@ -229,16 +242,16 @@ class Post extends Model
             'Picture'       =>  $User->Profile->picture,
             'Username'      =>  $User->username,
         ];
-        
+
         return $niceProfile;
     }
-        
+
 	private function generateFriendlyTime($time)
 	{
 		$currentTime= new \Datetime();
         $postTime = new \DateTime($time);
         $difference = $postTime->diff($currentTime, TRUE);
-        
+
         if($difference->y > 1)
         {
             return "over " . $difference->y . " years ago";
@@ -283,7 +296,7 @@ class Post extends Model
         {
             return "less than a minute";
         }
-        
+
     }
-    
+
 }
