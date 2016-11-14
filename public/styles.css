@@ -54,13 +54,11 @@ div.Love.active
 .Hate
 {
 	color: black;
-	display: none !important;
 }
 
 div.Hate.active
 {
 	background-color: black;
-	display: none;
 }
 
 .Fear

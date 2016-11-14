@@ -7,7 +7,7 @@
 </div>
 
 @if(count($Stream) > 0) <!-- If there are posts to show -->
-	
+
 @foreach($Stream as $key => $Event) <!-- For each item in stream -->
 
 <div class="row">
@@ -21,81 +21,88 @@
 <div>
     <b>
 	<a href="{{url('/')}}/{{{$Event['Post']['User']['Username']}}}">
-	&#64{{$Event['Post']['User']['Username']}}
+	&#64;{{$Event['Post']['User']['Username']}}
 
 	</a>
 	</b>
-	
-	
-    
+
+
+
 	<p>
 		<span>{{$Event['Post']['friendly_time']}} | </span>
     <i class="material-icons">link</i>
 		<span>{{$Event['Post']['total_reactions']}}</span>
-		
+
 		<!-- list emotions -->
 		@if(isset($Event['Post']['Emotions']))
 		@foreach($Event['Post']['Emotions'] as $Emotion) <!-- For each emotion on post -->
 			<span class="post-emotion {{$Emotion['Emotion']['emotion']}} severity-{{$Emotion['severity']}}">
 			@if(!($loop->last))
-				&nbsp
+				&nbsp;
 			@endif
 			{{$Emotion['Emotion']['emotion']}}
 
 			</span>
-		@endforeach 
+		@endforeach
 		@endif
 		<!-- post emotions end -->
 	</p>
 
 	<hr>
-    
+
 
 
     @if(isset($Event['Post']['Reactions']))
-    @foreach($Event['Post']['Reactions'] as $Reaction_em)   
+    @foreach($Event['Post']['Reactions'] as $Reaction_em)
         @foreach($Reaction_em as $Reaction)
-        <p>Reaction: &#64{{$Reaction['User']['Username']}} Emotion: {{$Reaction['Emotion']['emotion']}}</p>
+        <p>Reaction: &#64;{{$Reaction['User']['Username']}} Emotion: {{$Reaction['Emotion']['emotion']}}</p>
         @endforeach
     @endforeach
     @endif
-    
-    
+
+
 
 
 
     <p>{{$Event['Post']['content']}}</p>
-	
+
 	<div class="reaction-wrapper">
     @foreach($Emotions as $emotion)
-        
-        @if(isset($Event['Post']['Reactions']) && isset($Event['Post']['Reactions'][$emotion]))
+
+
+        @if(isset($Event['Post']['Reactions'][$emotion]))
         @foreach($Event['Post']['Reactions'][$emotion] as $event)
-            @if($event['user_id'] == Auth::id())
-				<div class="emotion-box {{$emotion}} active"><a href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></div>
-				@break;
-			@else
-				<div class="emotion-box {{$emotion}}"><a href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></div>   
-				@break;
-			@endif
+
+				<?php $values[$emotion][] = $event['user_id']; ?>
+
+
         @endforeach
-        
+				@if(in_array(Auth::id(), $values[$emotion]))
+					<div class="emotion-box {{$emotion}} active"><a href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></div>
+				@else
+					<div class="emotion-box {{$emotion}}"><a href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></div>
+				@endif;
+				<?php $values = null; ?>
+
         @else
+
             <div class="emotion-box {{$emotion}}"><a href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></div>
         @endif
-        
+
     @endforeach
-	</div>
-	
+
+
+	</div> <!-- reaction-wrapper -->
+
 	<hr>
-	
-	<p>	
-	
-		
-		
+
+	<p>
+
+
+
 
 	</p>
-	
+
 </div>
 
 <div class="panel-group" id="comments-wrapper-{{$Event['Post']['id']}}" role="tablist" aria-multiselectable="true">
@@ -107,7 +114,7 @@
         </a>
       </h4>
     </div>
-    
+
 	<div id="comments-{{$Event['Post']['id']}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
       <div class="panel-body">
 
@@ -116,7 +123,7 @@
 		<div class="col-md-10">
 		<p>
 		<a href="{{url('/')}}/{{$Comment['User']['Username']}}">
-		&#64{{$Comment['User']['Username']}} 
+		&#64;{{$Comment['User']['Username']}}
 		</a>
 		Replies: {{$Comment['total_replies']}} Created: {{$Comment['friendly_time']}}
 		<br>
@@ -131,7 +138,7 @@
 		<div class="col-md-8 col-md-offset-1">
 		<p>
 		<a href="{{url('/')}}/{{$Reply['User']['Username']}}">
-		&#64{{$Reply['User']['Username']}}
+		&#64;{{$Reply['User']['Username']}}
 		</a>
 		 Created: {{$Reply['friendly_time']}}
 		<br>
@@ -147,7 +154,7 @@
 
       </div>
     </div>
-	
+
   </div>
 </div>
 
@@ -224,4 +231,3 @@ no more posts
 
 
 @endsection
-
