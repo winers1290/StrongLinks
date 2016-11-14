@@ -21,9 +21,16 @@ select.create-box
 /*
 	Emotions
 */
+
 .Anger
 {
 	color: red;
+  transition: 1s;
+}
+
+div.emotion-box.Anger:hover
+{
+	background-color: red;
 }
 
 div.Anger.active
@@ -31,19 +38,15 @@ div.Anger.active
 	background-color: red;
 }
 
-div.Grief
-{
-	background-color: blue;
-}
-
-div.Grief.active
-{
-	background-color: blue;
-}
-
 .Love
 {
 	color: purple;
+  transition: 1s;
+}
+
+div.emotion-box.Love:hover
+{
+	background-color: purple;
 }
 
 div.Love.active
@@ -54,6 +57,12 @@ div.Love.active
 .Hate
 {
 	color: black;
+  transition: 1s;
+}
+
+div.emotion-box.Hate:hover
+{
+	background-color: black;
 }
 
 div.Hate.active
@@ -61,22 +70,34 @@ div.Hate.active
 	background-color: black;
 }
 
-.Fear
+.Happy
 {
-	color: grey;
+	color: yellow;
+  transition: 1s;
 }
 
-div.Fear.active
+div.emotion-box.Happy:hover
 {
-	background-color: grey;
+	background-color: yellow;
 }
 
-.Joy
+div.Happy.active
+{
+	background-color: yellow;
+}
+
+.Sad
 {
 	color: orange;
+  transition: 1s;
 }
 
-div.Joy.active
+div.emotion-box.Sad:hover
+{
+	background-color: orange;
+}
+
+div.Sad.active
 {
 	background-color: orange;
 }
@@ -138,6 +159,14 @@ div.Joy.active
 	font-weight: bold;
 }
 
+/* Generic Emotions Box styles */
+
+div.emotion-box > a
+{
+  text-decoration: none;
+  color: inherit;
+}
+
 div.emotion-box
 {
 	width:19%;
@@ -147,6 +176,8 @@ div.emotion-box
 	color: white;
 	display: inline-block;
 	background-color: grey;
+
+  /* box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23); */
 }
 
 div.emotion-box *
@@ -160,4 +191,11 @@ div.reaction-wrapper
 {
 	width: 100%;
 	height: 40px;
+}
+
+/* Post Box styling */
+
+div.post
+{
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }

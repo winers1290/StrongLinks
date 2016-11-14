@@ -13,7 +13,7 @@
 <div class="row">
 <div class="col-sm-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
 
-<div class="panel panel-default">
+<div class="panel panel-default post" id="post-{{$Event['Post']['id']}}">
 <div class="panel-body">
 
 @if(array_key_exists("Post", $Event)) <!-- if the item is a regular post -->
@@ -78,15 +78,15 @@
 
         @endforeach
 				@if(in_array(Auth::id(), $values[$emotion]))
-					<div class="emotion-box {{$emotion}} active"><a href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></div>
+					<a href="#"><div class="emotion-box post-{{$Event['Post']['id']}} {{$emotion}} active">{{$emotion}}</div></a>
 				@else
-					<div class="emotion-box {{$emotion}}"><a href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></div>
+					<a href="#"><div class="emotion-box post-{{$Event['Post']['id']}} {{$emotion}}">{{$emotion}}</div></a>
 				@endif;
 				<?php $values = null; ?>
 
         @else
 
-            <div class="emotion-box {{$emotion}}"><a href="{{url('/')}}/{{$Event['Post']['id']}}">{{$emotion}}</a></div>
+            <a href="#"><div class="emotion-box post-{{$Event['Post']['id']}} {{$emotion}}">{{$emotion}}</div></a>
         @endif
 
     @endforeach
