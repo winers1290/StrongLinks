@@ -17,7 +17,7 @@ $(window).scroll(function () {
   var nearToBottom = 100;
   if ($(window).scrollTop() + $(window).height() > $(document).height() - nearToBottom)
   {
-    alert("end of page :(");
+    
   }
 });
 

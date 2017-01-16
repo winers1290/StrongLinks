@@ -8,187 +8,109 @@
 
 @if(count($Stream) > 0) <!-- If there are posts to show -->
 
-@foreach($Stream as $key => $Event) <!-- For each item in stream -->
+@foreach($Stream as $Event) <!-- For each item in stream -->
+@foreach($Event as $key => $Post) <!-- For each item in stream -->
 
 <div class="row">
 <div class="col-sm-12 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
 
-<div class="panel panel-default post" id="post-{{$Event['Post']['id']}}">
+<div class="panel panel-default {{$Post['Type']}}" id="{{$Post['Attributes']['id']}}">
+
+  <div class="panel-heading">
+  <h3 class="panel-title">
+
+    <!-- Username Link -->
+    <b>
+    <a href="{{url('/' . $Post['User']['username'])}}">
+    &#64;{{$Post['User']['username']}}
+    </a>
+    </b>
+
+    <!-- time and reactions icons -->
+    <div class="icon-wrapper">
+    <i class="header-icon material-icons">access_time</i>
+    <span class="icon-text">
+      {{$Post['friendly_time']}}
+    </span>
+    <i class="header-icon material-icons">person_outline</i>
+    <span class="icon-text">
+      {{$Post['total_reactions']}}
+    </span>
+    </div> <!-- Icon wrapper -->
+
+  </h3>
+  </div> <!-- Panel Heading -->
+
 <div class="panel-body">
 
-@if(array_key_exists("Post", $Event)) <!-- if the item is a regular post -->
-<div class="col-md-12">
-<div>
-    <b>
-	<a href="{{url('/')}}/{{{$Event['Post']['User']['Username']}}}">
-	&#64;{{$Event['Post']['User']['Username']}}
+  <!-- Here we need to split between App\Post and App\CBT -->
+  @if($key == "App\Post")
+ {{$Post['Attributes']['content']}}
 
-	</a>
-	</b>
+ @include('common.reactions')
 
+  @elseif($key == "App\CBT")
 
+  <h1 class="text-center">
+    {{$Post['Attributes']['general']}}
+    <i class="material-icons">arrow_forward</i>
+    {{$Post['Attributes']['general_after']}}
+  </h1>
 
-	<p>
-		<span>{{$Event['Post']['friendly_time']}} | </span>
-    <i class="material-icons">link</i>
-		<span>{{$Event['Post']['total_reactions']}}</span>
+  <p class="text-center">
+    {{$Post['Attributes']['situation']}}
+  </p>
+  <hr>
 
-		<!-- list emotions -->
-		@if(isset($Event['Post']['Emotions']))
-		@foreach($Event['Post']['Emotions'] as $Emotion) <!-- For each emotion on post -->
-			<span class="post-emotion {{$Emotion['Emotion']['emotion']}} severity-{{$Emotion['severity']}}">
-			@if(!($loop->last))
-				&nbsp;
-			@endif
-			{{$Emotion['Emotion']['emotion']}}
+<div class="row">
+  <div class="col-sm-12 col-md-12">
+  <div class="automatic_thoughts">
+    <h4>Automatic Thoughts</h4>
+    <ul class="automatic_thought_list">
+      @foreach($Post['Automatic Thoughts'] as $thought)
+      <li class="automatic_thought_list">{{$thought['thought']}}</li>
+      @endforeach
+    </ul>
+  </div>
 
-			</span>
-		@endforeach
-		@endif
-		<!-- post emotions end -->
-	</p>
-
-	<hr>
-
-
-
-    @if(isset($Event['Post']['Reactions']))
-    @foreach($Event['Post']['Reactions'] as $Reaction_em)
-        @foreach($Reaction_em as $Reaction)
-        <p>Reaction: &#64;{{$Reaction['User']['Username']}} Emotion: {{$Reaction['Emotion']['emotion']}}</p>
-        @endforeach
-    @endforeach
-    @endif
-
-
-
-
-
-    <p>{{$Event['Post']['content']}}</p>
-
-	<div class="reaction-wrapper">
-    @foreach($Emotions as $emotion)
-
-
-        @if(isset($Event['Post']['Reactions'][$emotion]))
-        @foreach($Event['Post']['Reactions'][$emotion] as $event)
-
-				<?php $values[$emotion][] = $event['user_id']; ?>
-
-
-        @endforeach
-				@if(in_array(Auth::id(), $values[$emotion]))
-					<a href="#"><div class="emotion-box post-{{$Event['Post']['id']}} {{$emotion}} active">{{$emotion}}</div></a>
-				@else
-					<a href="#"><div class="emotion-box post-{{$Event['Post']['id']}} {{$emotion}}">{{$emotion}}</div></a>
-				@endif;
-				<?php $values = null; ?>
-
-        @else
-
-            <a href="#"><div class="emotion-box post-{{$Event['Post']['id']}} {{$emotion}}">{{$emotion}}</div></a>
-        @endif
-
-    @endforeach
-
-
-	</div> <!-- reaction-wrapper -->
-
-	<hr>
-
-	<p>
-
-
-
-
-	</p>
-
-</div>
-
-<div class="panel-group" id="comments-wrapper-{{$Event['Post']['id']}}" role="tablist" aria-multiselectable="true">
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingThree">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#comments-{{$Event['Post']['id']}}" href="#comments-{{$Event['Post']['id']}}" aria-expanded="false" aria-controls="comments-{{$Event['Post']['id']}}">
-          <i class="material-icons">comment</i>Comments <span>({{$Event['Post']['total_comments']}})</span>
-        </a>
-      </h4>
-    </div>
-
-	<div id="comments-{{$Event['Post']['id']}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-      <div class="panel-body">
-
-		@if(isset($Event['Post']['Comments']))
-		@foreach($Event['Post']['Comments'] as $Comment)
-		<div class="col-md-10">
-		<p>
-		<a href="{{url('/')}}/{{$Comment['User']['Username']}}">
-		&#64;{{$Comment['User']['Username']}}
-		</a>
-		Replies: {{$Comment['total_replies']}} Created: {{$Comment['friendly_time']}}
-		<br>
-		{{$Comment['comment']}}
-		</p>
-		</div>
-
-
-
-		@if(isset($Comment['Replies']))
-		@foreach($Comment['Replies'] as $Reply)
-		<div class="col-md-8 col-md-offset-1">
-		<p>
-		<a href="{{url('/')}}/{{$Reply['User']['Username']}}">
-		&#64;{{$Reply['User']['Username']}}
-		</a>
-		 Created: {{$Reply['friendly_time']}}
-		<br>
-		{{$Reply['comment']}}
-		</div>
-		@endforeach
-		@endif
-
-
-		@endforeach
-		@endif
-
-
-      </div>
-    </div>
-
+  <div class="rational_thoughts">
+    <h4>Rational Thoughts</h4>
+    <ul class="rational_thought_list">
+      @foreach($Post['Rational Thoughts'] as $thought)
+      <li class="rational_thought_list">{{$thought['thought']}}</li>
+      @endforeach
+    </ul>
   </div>
 </div>
-
-
-
-
-
-<div class="col-md-10">
-@if($Event['Post']['total_comments'] > 10)
-View more comments <b>({{$Event['Post']['total_comments'] - 10}})</b>
-@endif
-</div>
 </div>
 
-@else <!-- else, if it is a CBT stream event -->
-mddsfsdf
+  <div id="chart_div" style="max-width: 100%;"></div>
+<hr>
+ @include('common.reactions')
+
+  @endif
+
+</div> <!-- Panel Body -->
+
+<div class="panel-footer">
+  Comments ({{$Post['total_comments']}})
+</div>
+
+</div> <!-- Panel -->
+
+
+</div> <!-- col -->
+</div> <!-- row -->
+
+
+
+@endforeach <!-- Foreach Stream Item -->
+@endforeach
 
 @endif <!-- if(count($Stream) > 0) -->
 
-</div> <!-- Panel body -->
-</div> <!-- Panel -->
-
-</div> <!-- col-sm-12 col-md-8 md-offset-2 col-lg-6 col-lg-offet-3 -->
-</div> <!-- row -->
-
-@endforeach <!-- Foreach Stream Item -->
-
-
-
 <p><b>View more posts</b></p>
 
-@else
-no more posts
-@endif
 
 <a href="{{url('/logout')}}">Logout</a>
 @endsection

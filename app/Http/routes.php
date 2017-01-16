@@ -14,14 +14,14 @@
 
     Route::get('/logout', 'Home@Logout');
     Route::get('/', 'Home@Landing');
-    
+
     Route::get('/stream/{offset?}', 'Stream@CreateStream');
-    Route::get('/profile/{offset?}', 'Stream@ProfilePagination');
-    
-    Route::get('/{username}/{offset?}', 'Stream@Profile');
+    Route::get('/profile/{offset?}', 'Stream@ProfilePagination')->name('my_profile');
+
+    Route::get('/{username}/{offset?}', 'Stream@Profile')->name('profile');
 
     Route::post('/create', 'Create@Status');
- 
+
 
 
 
@@ -29,5 +29,3 @@
 
 
 Route::post('/', 'Home@Login');
-
-

@@ -6,12 +6,15 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\Libraries\Stream as StreamMaker;
+
 class Stream extends Controller
 {
     public function CreateStream($offset = 0)
     {
-        $Stream = new \App\Post;
-        $Data['Stream'] = $Stream->Stream(FALSE, $offset, NULL);
+        $Stream = new StreamMaker();
+        $Data['Stream'] = $Stream->format()->getFormattedPosts();
+
 
         //Page Variables
         $Emotions = \App\Emotion::all();
@@ -19,6 +22,11 @@ class Stream extends Controller
         {
             $Data['Emotions'][] = $Emotion->emotion;
         }
+
+        echo '<pre>';
+        print_r($Data);
+        echo '</pre>';
+
 
         return view('stream', $Data);
     }
