@@ -12,9 +12,8 @@ class Stream extends Controller
 {
     public function CreateStream($offset = 0)
     {
-        $Stream = new StreamMaker();
+        $Stream = new StreamMaker(NULL /*User ID*/, $offset);
         $Data['Stream'] = $Stream->format()->getFormattedPosts();
-
 
         //Page Variables
         $Emotions = \App\Emotion::all();
@@ -22,11 +21,6 @@ class Stream extends Controller
         {
             $Data['Emotions'][] = $Emotion->emotion;
         }
-
-        echo '<pre>';
-        print_r($Data);
-        echo '</pre>';
-
 
         return view('stream', $Data);
     }
@@ -38,23 +32,35 @@ class Stream extends Controller
 
     public function Profile($username = NULL, $offset = 0)
     {
-        $Stream = new \App\Post;
         if($username === NULL)
         {
-            $Data['Stream'] = $Stream->Stream(TRUE, $offset, NULL);
+          /*
+           * We are accessing profile
+          */
+          $Stream = new StreamMaker('profile', $offset);
         }
         else
         {
-            $Data['Stream'] = $Stream->Stream(FALSE, $offset, $username);
+          $Stream = new StreamMaker($username, $offset);
         }
 
-        //Page Variables
-        $Emotions = \App\Emotion::all();
-        foreach($Emotions as $Emotion)
+        if($Stream->Validate() === TRUE)
         {
-            $Data['Emotions'][] = $Emotion->emotion;
+          $Data['Stream'] = $Stream->format()->getFormattedPosts();
+
+          //Page Variables
+          $Emotions = \App\Emotion::all();
+          foreach($Emotions as $Emotion)
+          {
+              $Data['Emotions'][] = $Emotion->emotion;
+          }
+
+          return view('stream', $Data);
+        }
+        else
+        {
+          abort('404');
         }
 
-        return view('stream', $Data);
     }
 }

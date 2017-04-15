@@ -1,21 +1,34 @@
 /*
-#############################################
-1.0 Emotions Section
-#############################################
+    #############################################
+    0.0 Body & HTML
+    #############################################
+*/
+
+html, body
+{
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+
+/*
+    #############################################
+    1.0 Emotions Section
+    #############################################
 */
 
 /* 1.0 Emotions - colors */
 
-$emotions : "Anger" red, "Love" purple, "Hate" black, "Happy" yellow, "Sad" orange;
+$emotions : "Anger" red, "Love" purple, "Hate" black, "Happy" orange, "Sad" blue;
 
 @each $emotion in $emotions
 {
     .#{nth($emotion, 1)}
     {
       color: nth($emotion, 2);
-      transition: 1s;
+      transition: background-color 0.5s ease;
 
-      &.emotion-box:hover
+      &.emotion-box.hoverable:hover
       {
         background-color: nth($emotion, 2);
       }
@@ -23,36 +36,11 @@ $emotions : "Anger" red, "Love" purple, "Hate" black, "Happy" yellow, "Sad" oran
       &.active
       {
         background-color: nth($emotion, 2);
+        color: #fff;
       }
-
     }
 }
 
-
-/*
-    1.1 Emotional Severity - from 1 to 10
-*/
-@for $i from 1 through 10
-{
-  .severity-#{$i}
-  {
-    @if(($i != 10) and ($i != 1))
-    {
-      font-size: 1 +  ($i / 10) + rem;
-    }
-
-    @else if($i == 1)
-    {
-      font-size: 1rem;
-    }
-
-    @else
-    {
-      font-size: 2rem;
-    }
-
-  }
-}
 
 /* Emotion reaction containers */
 
@@ -61,6 +49,9 @@ div.reaction-wrapper
 {
 	width: 100%;
 	height: 40px;
+	margin-top: 20px;
+  position: static;
+  display: inline-block;
 }
 
 /* box wrapper */
@@ -69,10 +60,36 @@ div.emotion-box
 	width:19%;
 	line-height: 40px;
 	text-align: center;
-	position: static;
+	position: relative;
 	color: white;
 	display: inline-block;
 	background-color: grey;
+
+  &.create-post:hover > .dropdown-content
+  {
+    display: block;
+    transform: translateY(0%);
+    transition-delay: 0s, 0s, 0.3s;
+    z-index: 1;
+  }
+
+    &.create-post > .dropdown-content
+    {
+      display: none;
+      position: absolute;
+      background-color: grey;
+      min-width: 100%;
+      z-index: -1;
+      transform: translateY(-2em);
+      transition: all 0.3s ease-in-out;
+
+      & > input[type=range]
+      {
+        writing-mode: bt-lr; /* IE */
+        -webkit-appearance: slider-vertical; /* WebKit */
+        transform: rotate(180deg);
+      }
+    }
 
     &,p,span,a
     {
@@ -84,9 +101,9 @@ div.emotion-box
 }
 
 /*
-#############################################
-2.0 Posts Section
-#############################################
+    #############################################
+    2.0 Posts Section
+    #############################################
 */
 
 div.post
@@ -102,15 +119,78 @@ div.post
 	line-height: 2rem;
 }
 
-.header-icon
+i.material-icons.header-icon
 {
-  
+    display: inline-flex;
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+span.icon-text
+{
+  vertical-align: middle;
+  font-size: 15px;
+}
+
+div.icon-wrapper
+{
+  float: right;
+}
+
+div.automatic_thoughts,
+div.rational_thoughts
+{
+  width:45%;
+}
+
+div.thought_seperator
+{
+  width: 10%;
+}
+
+div.automatic_thoughts
+{
+  float: left;
+  text-align: left;
+}
+
+div.rational_thoughts
+{
+  float: right;
+  text-align: right;
+}
+
+li.automatic_thought_list,
+li.rational_thought_list
+{
+  padding-bottom: 10px;
+}
+
+li.automatic_thought_list
+{
+
+}
+
+li.rational_thought_list
+{
+  direction: rtl;
+}
+
+ul.rational_thought_list
+{
+  padding-left: 0;
+  -webkit-padding-end: 25px;
+}
+
+ul.automatic_thought_list
+{
+  -webkit-padding-start: 25px;
 }
 
 /*
-#############################################
-3.0 Create Events Section
-#############################################
+    #############################################
+    3.0 Create Events Section
+    #############################################
 */
 
 textarea.create-box,

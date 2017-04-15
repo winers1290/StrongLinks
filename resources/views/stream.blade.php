@@ -25,9 +25,13 @@
     &#64;{{$Post['User']['username']}}
     </a>
     </b>
+    @if($key == "App\Post")
+    <i class="header-icon material-icons">color_lens</i>
+    @endif
 
     <!-- time and reactions icons -->
     <div class="icon-wrapper">
+
     <i class="header-icon material-icons">access_time</i>
     <span class="icon-text">
       {{$Post['friendly_time']}}
@@ -115,39 +119,55 @@
 <a href="{{url('/logout')}}">Logout</a>
 @endsection
 
+
+
+
+
 @section('create')
 
 @include('common.errors')
 
 <form action="{{url('/create')}}" method="POST">
 {{ csrf_field() }}
-<textarea class="create-box" placeholder="Tell us something..." name="content"></textarea>
-<br>
-<input type="submit" name="submit" value="Submit" class="create-box">
+<div class="panel panel-default">
 
- <select class="create-box" name="emotion_one">
-    <option value="Blank"></option>
-    @foreach($Emotions as $Emotion)
-    <option value="{{$Emotion}}">{{$Emotion}}</option>
-    @endforeach
-</select>
-<input type="text" name="emotion_one_severity" placeholder="0" class="create-box">
+<div class="panel-body">
+  <textarea class="create-box" placeholder="Tell us something..." name="content"></textarea>
+  <input type="submit" name="submit" value="Submit" class="create-box">
 
- <select class="create-box" name="emotion_two">
-    <option value="Blank"></option>
-    @foreach($Emotions as $Emotion)
-    <option value="{{$Emotion}}">{{$Emotion}}</option>
-    @endforeach
-</select>
-<input type="text" name="emotion_two_severity" placeholder="0" class="create-box">
+</div> <!-- panel body -->
 
- <select class="create-box" name="emotion_three">
-    <option value="Blank"></option>
-    @foreach($Emotions as $Emotion)
-    <option value="{{$Emotion}}">{{$Emotion}}</option>
-    @endforeach
-</select>
-<input type="text" name="emotion_three_severity" placeholder="0" class="create-box">
+<div class="panel-footer">
+
+  @if(isset($Emotions) && count($Emotions) > 0)
+
+  <div class="reaction-wrapper">
+  @foreach($Emotions as $Emotion)
+        <div class="emotion-box create-post {{$Emotion}}">
+          {{$Emotion}}
+          <div class="dropdown-content">
+            <input type="hidden" name="emotion_{{$loop->iteration}}" value="{{$Emotion}}">
+            <input type="range" min="0" max="5" step="1" value="0" name="emotion_{{$loop->iteration}}_severity" placeholder="0" class="create-box">
+            <div id="emotion_{{$loop->iteration}}_severity_number">
+              0
+            </div>
+          </div> <!-- dropdown-content -->
+        </div> <!-- Emotion-Box -->
+  @endforeach
+</div> <!-- Reaction-Wrapper -->
+
+  @endif
+
+
+
+
+
+</div> <!-- panel-footer -->
+
+</div> <!--panel -->
+
+
+
 
 </form>
 

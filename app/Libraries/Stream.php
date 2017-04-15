@@ -8,6 +8,8 @@ use Carbon\Carbon;
 
 use App\Libraries\Pretty;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 class Stream
 {
 
@@ -17,7 +19,8 @@ class Stream
   //Array of posts ready to pass to view resource
   private $formattedPosts;
 
-  public $test = "meow";
+  //Array of errors occured throughout execution
+  private $errors = [];
 
   /*
    * The Create() function will return all the data you need to display
@@ -56,6 +59,7 @@ class Stream
         catch (ModelNotFoundException $e)
         {
           //This page doesn't exist
+          $this->errors[] = "Username does not exist";
           return FALSE;
         }
       }
@@ -71,6 +75,7 @@ class Stream
       catch (ModelNotFoundException $e)
       {
         //This page doesn't exist
+        $this->errors[] = "Username does not exist";
         return FALSE;
       }
 
@@ -271,6 +276,18 @@ class Stream
       return FALSE;
     }
 
+  }
+
+  public function Validate()
+  {
+    if(count($this->errors) > 0)
+    {
+      return FALSE;
+    }
+    else
+    {
+      return TRUE;
+    }
   }
 
 }

@@ -6,7 +6,7 @@
   @if(array_key_exists($Emotion, $Post['Reactions']))
       <div class="emotion-box active">
   @else
-  <div class="emotion-box">
+  <div class="emotion-box hoverable">
   @endif
     {{$Emotion}}</div>
     </a>
