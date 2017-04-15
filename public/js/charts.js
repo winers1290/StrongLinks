@@ -4,7 +4,7 @@ function drawChart() {
   var data = google.visualization.arrayToDataTable([
     ['', 'Before', 'After'],
     ['Anger', 7, 4],
-    ['Jealousy', 5, 2],
+    ['Envy', 5, 2],
     ['Love', 3, 5],
     ['Hate', 1, 2]
   ]);

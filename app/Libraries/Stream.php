@@ -100,11 +100,27 @@ class Stream
     */
     if(isset($User) && $ID != NULL)
     {
-      $this->unformattedPosts = $this->streamQuery($User, $offset, $limit);
+      $query = $this->streamQuery($User, $offset, $limit);
+      if($query !== FALSE)
+      {
+        $this->unformattedPosts = $query;
+      }
+      else
+      {
+        return FALSE;
+      }
     }
     elseif($ID == NULL)
     {
-      $this->unformattedPosts = $this->streamQuery(NULL /* User Object */, $offset, $limit);
+      $query = $this->streamQuery(NULL /* User Object */, $offset, $limit);
+      if($query !== FALSE)
+      {
+        $this->unformattedPosts = $query;
+      }
+      else
+      {
+        return FALSE;
+      }
     }
 
     return $this;
@@ -117,7 +133,6 @@ class Stream
     {
       foreach($this->unformattedPosts as $Post)
       {
-
         $Created = new Carbon($Post->created_at);
 
         switch(get_class($Post))
@@ -230,26 +245,40 @@ class Stream
             ->limit($limit)
             ->get();
 
-    foreach($union as $item)
+    if(count($union) > 0)
     {
-      $model = "\App\\" . $item->source;
-      try
+      foreach($union as $item)
       {
-        $objects[] = $model::findOrFail($item->id);
+        $model = "\App\\" . $item->source;
+        try
+        {
+          $objects[] = $model::findOrFail($item->id);
+        }
+        catch (ModelNotFoundException $e)
+        {
+          /*
+           * Soemthing wrong with database record. We don't really want to go near
+           * it so let's just continue and error log
+          */
+          //Note: In future, will want to expand this to add tailored posts
+          error_log("Something wrong with " . $item->source . " ID = " . $item->id . ": " . $e->getMessage());
+          continue;
+        }
       }
-      catch (ModelNotFoundException $e)
+      if(isset($objects) && count($objects) > 0)
       {
-        /*
-         * Soemthing wrong with database record. We don't really want to go near
-         * it so let's just continue and error log
-        */
-        //Note: In future, will want to expand this to add tailored posts
-        error_log("Something wrong with " . $item->source . " ID = " . $item->id . ": " . $e->getMessage());
-        continue;
+        return $objects;
+      }
+      else
+      {
+        return FALSE;
       }
     }
 
-    return $objects;
+    else
+    {
+      return FALSE;
+    }
 
   }
 

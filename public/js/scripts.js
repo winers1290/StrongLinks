@@ -44,14 +44,14 @@ $.each(rangeSliders, function(index) {
 });
 
 
-// Load more when user scrolls to end of page
-$(window).scroll(function () {
-  var nearToBottom = 100;
-  if ($(window).scrollTop() + $(window).height() > $(document).height() - nearToBottom)
-  {
 
-  }
-});
+// Load more when user scrolls to end of page
+window.onscroll = function(ev) {
+    if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+
+streamPaination();
+    }
+};
 
 
 });

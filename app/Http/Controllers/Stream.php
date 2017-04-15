@@ -13,21 +13,50 @@ class Stream extends Controller
     public function CreateStream($offset = 0)
     {
         $Stream = new StreamMaker(NULL /*User ID*/, $offset);
-        $Data['Stream'] = $Stream->format()->getFormattedPosts();
+        $Stream = $Stream->format();
+        if($Stream !== FALSE)
+        {
+          $Data['Stream'] = $Stream->getFormattedPosts();
 
-        //Page Variables
+          //Page Variables
+          $Emotions = \App\Emotion::all();
+          foreach($Emotions as $Emotion)
+          {
+              $Data['Emotions'][] = $Emotion->emotion;
+          }
+
+          return view('stream', $Data);
+        }
+    }
+
+    public function ProfilePagination($offset = 0)
+    {
+        return $this->Profile(NULL, $offset);
+    }
+
+    public function DynamicStream($offset)
+    {
+      $Stream = new StreamMaker(NULL /*User ID*/, $offset);
+      $Stream = $Stream->format();
+
+      //Is the stream invalid? (unformattable or null)
+      if($Stream !== FALSE)
+      {
+        $Data['Stream'] = $Stream->getFormattedPosts();
+
+        //Template Variables
         $Emotions = \App\Emotion::all();
         foreach($Emotions as $Emotion)
         {
             $Data['Emotions'][] = $Emotion->emotion;
         }
 
-        return view('stream', $Data);
-    }
-
-    public function ProfilePagination($offset = 0)
-    {
-        return $this->Profile(NULL, $offset);
+        return view('templates.stream-pagination', $Data);
+      }
+      else
+      {
+        return response()->json(FALSE);
+      }
     }
 
     public function Profile($username = NULL, $offset = 0)

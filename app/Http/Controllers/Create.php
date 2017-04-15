@@ -54,9 +54,6 @@ class Create extends Controller
                 $New = new CreateObject($validator->getData());
                 return redirect('/stream');
             }
-
-
-
         }
 
         else

@@ -18,6 +18,9 @@
     Route::get('/stream/{offset?}', 'Stream@CreateStream');
     Route::get('/profile/{offset?}', 'Stream@ProfilePagination')->name('my_profile');
 
+    //For dynamically loading new posts onto page
+    Route::post('/stream/{offset}', 'Stream@DynamicStream');
+
     Route::get('/{username}/{offset?}', 'Stream@Profile')->name('profile');
 
     Route::post('/create', 'Create@Status');
