@@ -17,7 +17,7 @@ function drawChart() {
     bars: 'vertical' // Required for Material Bar Charts.
   };
 
-  var chart = new google.charts.Bar(document.getElementById('chart_div'));
+  //var chart = new google.charts.Bar(document.getElementById('chart_div'));
 
-  chart.draw(data, options);
+  //chart.draw(data, options);
 }

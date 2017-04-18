@@ -78,7 +78,9 @@
 </div>
 </div>
 
-  <div id="chart_div" style="max-width: 100%;"></div>
+<div class="chart-area">
+{!! $Post['chart']->render() !!}
+</div>
 <hr>
  @include('common.reactions')
 

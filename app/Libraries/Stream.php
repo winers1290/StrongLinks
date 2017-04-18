@@ -10,6 +10,8 @@ use App\Libraries\Pretty;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
+use Charts;
+
 class Stream
 {
 
@@ -38,10 +40,10 @@ class Stream
   */
   public function __construct($ID = NULL, $offset = 0, $limit = 10)
   {
-    //See if it is a username
+    //See if it is a username or the word 'profile'
     if(is_string($ID) && $ID != NULL)
     {
-      if($ID == "profile")
+      if($ID == 'profile')
       {
         /*
          * Indicates they are on their own page. Authentication happens on
@@ -49,8 +51,9 @@ class Stream
         */
         $User = Auth::user();
       }
-      else
+      else //it is a username
       {
+
         //Let's see if we can find the user
         try
         {
@@ -62,6 +65,18 @@ class Stream
           $this->errors[] = "Username does not exist";
           return FALSE;
         }
+
+        /*
+         * If they're accessing their own profile, we want to redirect
+         * them to a nice link /profile
+        */
+        /*
+        if($User->id == Auth::user()->id)
+        {
+          return redirect()->route('stream', ['profile', $offset]);
+        }
+        */
+
       }
     }
     //Now see if it is an integer
@@ -86,11 +101,11 @@ class Stream
       //We check that we don't need to redirect the user to their own profile
       if($User->id == Auth::user()->id)
       {
-        return redirect()->route('my_profile', ["profile", $offset]);
+        return redirect()->route('stream', ['profile', $offset]);
       }
       else
       {
-        return redirect()->route('profile', [$User->username, $offset]);
+        return redirect()->route('stream', [$User->username, $offset]);
       }
     }
 
@@ -194,6 +209,23 @@ class Stream
 
             case 'App\CBT':
 
+            $i = 0;
+            //Let's construct the chart
+            $chart = Charts::multi('bar', 'material')
+              //chart settings
+              ->title('my chart' . ++$i)
+              // A dimension of 0 means it will take 100% of the space
+              ->dimensions(0, 400) // Width x Height
+              // This defines a preset of colors already done:)
+              ->template("material")
+              ->dataset('Element 1', [5,20,100])
+              ->dataset('Element 2', [15,30,80])
+              ->dataset('Element 3', [25,10,40])
+              // Setup what the values mean
+              ->labels(['One', 'Two', 'Three']);
+
+
+
               $this->formattedPosts[] =
                 [
                   get_class($Post) =>
@@ -209,6 +241,7 @@ class Stream
                       'friendly_time'       => $Created->diffForHumans(),
                       'total_reactions'     => 0,
                       'total_comments'     => 0,
+                      'chart'             => $chart,
                     ],
                 ];
             break;
@@ -220,6 +253,7 @@ class Stream
     }
     else
     {
+      $this->errors[] = ['error...'];
       return FALSE;
     }
   }
@@ -238,13 +272,19 @@ class Stream
       $cbt->where('user_id', $User->id);
     }
 
+    /*
+     * For page 0 offset, offset = 0;
+     * But, for page 2 offset, offset = 1 * $limit, because there are 10 to skip.
+     * therefore, offset = (offset - 1) * limit
+    */
     $union = $cbt
             ->union($posts)
             ->orderBy('created_at', 'desc')
-            ->skip($offset * $limit)
+            ->skip(($offset - 1) * $limit)
             ->limit($limit)
             ->get();
 
+            error_log($offset * $limit);
     if(count($union) > 0)
     {
       foreach($union as $item)
@@ -271,13 +311,15 @@ class Stream
       }
       else
       {
-        return FALSE;
+        $this->errors[] = ['No stream objects found'];
+        return $this;
       }
     }
 
     else
     {
-      return FALSE;
+      $this->errors[] = ['No stream objects found'];
+      return $this;
     }
 
   }

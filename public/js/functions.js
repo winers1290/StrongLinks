@@ -17,8 +17,12 @@ function ajaxCall(data = null, url, callback, errorCallback, dataType = "JSON")
 
 //On load variable
 var page = 1;
-function streamPaination()
+function streamPaination(endpoint)
 {
+  var url = String(window.location);
+  var endpoint = url.split("/");
+  endpoint = endpoint[endpoint.length - 1];
+
   var errorCallback = function(data)
   {
     page = page - 1;
@@ -32,10 +36,9 @@ function streamPaination()
     }
     else
     {
-      console.log(data);
       $("#stream-wrapper").append(data);
     }
   }
     //Make call to load more :S
-    ajaxCall(null, "/stream/" + ++page, callback, errorCallback, "HTML");
+    ajaxCall(null, "/" + endpoint + "/" + ++page, callback, errorCallback, "HTML");
 }

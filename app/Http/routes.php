@@ -15,13 +15,12 @@
     Route::get('/logout', 'Home@Logout');
     Route::get('/', 'Home@Landing');
 
-    Route::get('/stream/{offset?}', 'Stream@CreateStream');
-    Route::get('/profile/{offset?}', 'Stream@ProfilePagination')->name('my_profile');
+    Route::get('/{stream}/{offset?}', 'Stream@CreateStream')->name('stream');
 
     //For dynamically loading new posts onto page
-    Route::post('/stream/{offset}', 'Stream@DynamicStream');
-
-    Route::get('/{username}/{offset?}', 'Stream@Profile')->name('profile');
+    Route::post('/{stream_type}/{offset}', 'Stream@DynamicStream');
+    //Route::post('/profile/{offset}', 'Stream@ProfilePagination');
+    //Route::post('/{username}/{offset?}', 'Stream@Profile');
 
     Route::post('/create', 'Create@Status');
 
