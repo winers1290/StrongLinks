@@ -150,6 +150,7 @@ return [
 
         /* Stuff I've added */
         ConsoleTVs\Charts\ChartsServiceProvider::class,
+        
 
         /*
          * Application Service Providers...

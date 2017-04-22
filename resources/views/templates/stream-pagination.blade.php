@@ -54,6 +54,9 @@
   <p class="text-center">
     {{$Post['Attributes']['situation']}}
   </p>
+  <p>
+    A bold hippopotamus was standing one day, by the light of the evening star!
+  </p>
   <hr>
 
 <div class="row">
@@ -78,10 +81,10 @@
 </div>
 </div>
 
-<div class="chart-area">
-{!! $Post['chart']->render() !!}
-</div>
-<hr>
+  <div class="chart-area">
+  {!! $Post['chart']->render() !!}
+  </div>
+
  @include('common.reactions')
 
   @endif

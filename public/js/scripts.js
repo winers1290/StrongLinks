@@ -1,23 +1,5 @@
 $( document ).ready(function() {
 
-//For each reaction button on page
-$.each($("div.emotion-box"), function() {
-
-  $(this).click(function(e){
-    if($(this).hasClass('create-post'))
-    {
-      //Not part of a standard reaction (used to create statuses), skip
-    }
-    else
-    {
-      e.preventDefault();
-      alert("meow");
-    }
-
-  });
-
-
-});
 var rangeSliders = [];
 var rangeSliderNumbers = [];
 
@@ -49,6 +31,12 @@ window.onscroll = function(ev) {
       streamPaination();
     }
 };
+
+  $("body").on("click", ".reaction", function(e){
+    e.preventDefault();
+    react($(this));
+  });
+
 
 
 });

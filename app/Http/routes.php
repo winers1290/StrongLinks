@@ -11,23 +11,20 @@
 |
 */
 
+    /* Api:
+     * Not really... just used for AJAX atm, but to be expanded!
+    */
+    Route::get('/api/authenticated', 'Api@authenticated');
+
+    Route::put('api/{post_type}/{post_id}/reaction/{emotion_id}', 'Api@putReaction');
+    Route::delete('api/{post_type}/{post_id}/reaction/{emotion_id}', 'Api@deleteReaction');
 
     Route::get('/logout', 'Home@Logout');
     Route::get('/', 'Home@Landing');
+    Route::post('/', 'Home@Login');
+    Route::post('/create', 'Create@Status');
 
     Route::get('/{stream}/{offset?}', 'Stream@CreateStream')->name('stream');
 
     //For dynamically loading new posts onto page
     Route::post('/{stream_type}/{offset}', 'Stream@DynamicStream');
-    //Route::post('/profile/{offset}', 'Stream@ProfilePagination');
-    //Route::post('/{username}/{offset?}', 'Stream@Profile');
-
-    Route::post('/create', 'Create@Status');
-
-
-
-
-
-
-
-Route::post('/', 'Home@Login');

@@ -45,7 +45,7 @@ class Stream extends Controller
       $Emotions = \App\Emotion::all();
       foreach($Emotions as $Emotion)
       {
-        $Data['Emotions'][] = $Emotion->emotion;
+        $Data['Emotions'][] = $Emotion;
       }
 
       /* If the request type is POST, user is dynamically requesting content */
@@ -75,50 +75,8 @@ class Stream extends Controller
     }
   }
 
-  /*
-   * We need to tell the CreateStream function that this is a POST request.
-   * POST requests are from users who are dynamically loading stream content
-  */
-  public function DynamicStream($stream_type, $offset)
+  public function dynamicStream($stream_type, $offset = 0)
   {
-    return $this->CreateStream($stream_type, $offset, 'POST');
+    return $this->CreateStream($stream_type, $offset, "POST");
   }
-
-    public function ProfilePagination($offset = 0)
-    {
-        return $this->Profile(NULL, $offset);
-    }
-    public function Profile($username = NULL, $offset = 0)
-    {
-        if($username === NULL)
-        {
-          /*
-           * We are accessing profile
-          */
-          $Stream = new StreamMaker('profile', $offset);
-        }
-        else
-        {
-          $Stream = new StreamMaker($username, $offset);
-        }
-
-        if($Stream->Validate() === TRUE)
-        {
-          $Data['Stream'] = $Stream->format()->getFormattedPosts();
-
-          //Page Variables
-          $Emotions = \App\Emotion::all();
-          foreach($Emotions as $Emotion)
-          {
-              $Data['Emotions'][] = $Emotion->emotion;
-          }
-
-          return view('stream', $Data);
-        }
-        else
-        {
-          abort('404');
-        }
-
-    }
 }

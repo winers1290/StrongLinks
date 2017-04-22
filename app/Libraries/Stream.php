@@ -180,16 +180,8 @@ class Stream
              * Some non-logged in users can still see the stream, so we need
              * to check for this first
             */
-            $Reactions = [];
-            if(Auth::user())
-            {
-              $reactions = \App\PostReaction::where([['user_id', Auth::user()->id], ['post_id', $Post->id]]);
-              foreach($reactions as $r)
-              {
-                $Reactions[] = [$r->Emotion->emotion => TRUE];
-              }
-            }
-
+            $Reactions = NULL;
+            $Reactions = \App\Post::getReactions($Post->id);
 
             $this->formattedPosts[] =
               [
@@ -202,9 +194,12 @@ class Stream
                     'Reactions'         => $Reactions,
                     'friendly_time'     => $Created->diffForHumans(),
                     'total_comments'    => count($Post->Comments),
-                    'total_reactions'   => count($Post->Reactions),
+                    'total_reactions'   => $Reactions['count'],
                   ],
               ];
+
+
+
             break;
 
             case 'App\CBT':
@@ -224,14 +219,21 @@ class Stream
               // Setup what the values mean
               ->labels(['One', 'Two', 'Three']);
 
-
+              /*
+               * We need to know on the display, whether the current user has
+               * reacted to a post on the stream so we can indicate this.
+               * Some non-logged in users can still see the stream, so we need
+               * to check for this first
+              */
+              $Reactions = NULL;
+              $Reactions = \App\CBT::getReactions($Post->id);
 
               $this->formattedPosts[] =
                 [
                   get_class($Post) =>
                     [
                       'Type'                => explode('\\', get_class($Post))[1],
-                      'Reactions'           => [],
+                      'Reactions'           => $Reactions,
                       'Attributes'          => $Post->getAttributes(),
                       'User'                => Pretty::prettyUser($Post->User),
                       'Automatic Thoughts'  => $Post->AutomaticThoughts->toArray(),
@@ -239,7 +241,7 @@ class Stream
                       'Evidence'            => $Post->Evidence->toArray(),
                       'Rational Thoughts'   => $Post->RationalThoughts->toArray(),
                       'friendly_time'       => $Created->diffForHumans(),
-                      'total_reactions'     => 0,
+                      'total_reactions'     => $Reactions['count'],
                       'total_comments'     => 0,
                       'chart'             => $chart,
                     ],
@@ -322,18 +324,6 @@ class Stream
       return $this;
     }
 
-  }
-
-  public function getUnformattedPosts()
-  {
-    if(count($this->unformattedPosts) > 0)
-    {
-      return $this->unformattedPosts;
-    }
-    else
-    {
-     return FALSE;
-    }
   }
 
   public function getFormattedPosts()

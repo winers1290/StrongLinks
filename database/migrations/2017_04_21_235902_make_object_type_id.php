@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePostReactionsTable extends Migration
+class MakeObjectTypeId extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +13,9 @@ class CreatePostReactionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('post_reactions', function (Blueprint $table) {
+        Schema::create('object_types', function (Blueprint $table) {
             $table->increments('id');
-	    $table->integer('user_id');
-	    $table->integer('emotion_id');
-	    $table->integer('post_id');
+            $table->string('type');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreatePostReactionsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('post_reactions');
+        Schema::dropIfExists('object_types');
     }
 }

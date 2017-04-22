@@ -146,10 +146,10 @@
 
   <div class="reaction-wrapper">
   @foreach($Emotions as $Emotion)
-        <div class="emotion-box create-post {{$Emotion}}">
-          {{$Emotion}}
+        <div class="emotion-box create-post {{$Emotion['emotion']}}">
+          {{$Emotion['emotion']}}
           <div class="dropdown-content">
-            <input type="hidden" name="emotion_{{$loop->iteration}}" value="{{$Emotion}}">
+            <input type="hidden" name="emotion_{{$loop->iteration}}" value="{{$Emotion['emotion']}}">
             <input type="range" min="0" max="5" step="1" value="0" name="emotion_{{$loop->iteration}}_severity" placeholder="0" class="create-box">
             <div id="emotion_{{$loop->iteration}}_severity_number">
               0
