@@ -19,6 +19,9 @@
     Route::put('api/{post_type}/{post_id}/reaction/{emotion_id}', 'Api@putReaction');
     Route::delete('api/{post_type}/{post_id}/reaction/{emotion_id}', 'Api@deleteReaction');
 
+    Route::put('api/{post_type}/{post_id}/comment', 'Api@putComment');
+    Route::delete('api/{post_type}/{post_id}/comment/{comment_id}', 'Api@deleteComment');
+
     Route::get('/logout', 'Home@Logout');
     Route::get('/', 'Home@Landing');
     Route::post('/', 'Home@Login');

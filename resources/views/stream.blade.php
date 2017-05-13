@@ -100,7 +100,30 @@
 </div> <!-- Panel Body -->
 
 <div class="panel-footer">
-  Comments ({{$Post['total_comments']}})
+  @if($Post['total_comments'] > 0)
+  Comments ({{$Post['total_comments'] or ""}})
+  @endif
+
+  <textarea class="add-comment" data-post-type="{{$Post['Type']}}" data-post-id="{{$Post['Attributes']['id']}}" placeholder="Type your comment" style="width: 100%"></textarea>
+
+  <table class="table" id="comments-{{$Post['Type']}}-{{$Post['Attributes']['id']}}">
+  @foreach($Post['recentComments'] as $comment)
+  <tr>
+    <td>
+      <a href="{{url('/' . $comment->Profile->User->username)}}">
+      &#64;{{$comment->Profile->User->username}}
+      </a>
+      {{$comment->comment}} <br> Like | Report
+    </td>
+  </tr>
+  @endforeach
+</table>
+@if($Post['total_comments'] > 3)
+View More
+@endif
+
+
+
 </div>
 
 </div> <!-- Panel -->

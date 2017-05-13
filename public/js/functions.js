@@ -94,10 +94,9 @@ function react(item)
 
   //Prepare the call
   var url = 'api/' + post_type + '/' + post_id + '/reaction/' + emotion_id;
-  console.log(url);
-  var callback = function(data, callbackObject)
+
+  var callback = function(data)
   {
-    console.log(data);
     if(data == true)
     {
       item.toggleClass('active');
@@ -107,4 +106,33 @@ function react(item)
   var dataType = "JSON";
 
   ajaxCall(null, url, callback, errorCallback, dataType, method, item);
+}
+
+function createComment(item)
+{
+  //Grab data about item
+  var post_id = item.attr('data-post-id');
+  var post_type = item.attr('data-post-type');
+  var method = "PUT";
+
+  //Pull the comment
+  var data = {'comment': item.val()};
+
+  var commentTable = $("table#comments-" + post_type + "-" + post_id);
+
+
+  //Prepare the call
+  var url = 'api/' + post_type + '/' + post_id + '/comment/';
+  var callback = function(data, callbackObject)
+  {
+    //We need to dynamically add the comment
+    commentTable.prepend(data);
+  }
+  var errorCallback = function(data) {}
+  var dataType = "HTML";
+
+  //Clear comment box
+  item.val('');
+
+  ajaxCall(data, url, callback, errorCallback, dataType, method, item);
 }

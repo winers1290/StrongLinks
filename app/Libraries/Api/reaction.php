@@ -40,13 +40,21 @@ class reaction
           //If there is a record, does the user want to delete it?
           if($method === "DELETE" && count($reaction) == 1)
           {
-            $reaction->delete();
-            $this->success = TRUE;
+            //Is the user authorised?
+            if($user->can('delete', $reaction))
+            {
+              $reaction->delete();
+              $this->success = TRUE;
+            }
+            else
+            {
+              abort(403);
+            }
           }
 
           //Otherwise, even if there is already a record, we return true anyway.
           //Obsiouly the program has not recognised its existence, and returning TRUE
-          //Should make it remember.
+          //might make it remember.
           $this->success = TRUE;
       }
 

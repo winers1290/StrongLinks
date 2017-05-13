@@ -26,10 +26,9 @@ class DatabaseSeeder extends Seeder
         });
 
         factory(App\Name::class, 1000)->create();
-        factory(App\PostComment::class, 1000)->create();
-        factory(App\PostCommentReply::class, 500)->create();
+        factory(App\ObjectComment::class, 1000)->create();
         factory(App\PostEmotion::class, 1000)->create();
-        factory(App\PostReaction::class, 500)->create();
+        factory(App\ObjectReaction::class, 500)->create();
         factory(App\CBTEvidence::class, 500)->create();
         factory(App\CBTAutomaticThought::class, 500)->create();
         factory(App\CBTRationalThought::class, 500)->create();
@@ -39,7 +38,6 @@ class DatabaseSeeder extends Seeder
             'Anger',
             'Love',
             'Hate',
-            'Limerence',
             'Happy',
             'Sad',
         ];
@@ -51,6 +49,18 @@ class DatabaseSeeder extends Seeder
                 'active'         =>  $emotion,
                 'description'   => 'test',
             ]);
+        }
+
+        $objectTypes = [
+          'post',
+          'cbt'
+        ];
+
+        foreach($objectTypes as $type)
+        {
+          DB::table('object_types')->insert([
+              'type' => $type,
+          ]);
         }
 
 

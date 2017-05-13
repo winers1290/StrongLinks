@@ -32,10 +32,20 @@ window.onscroll = function(ev) {
     }
 };
 
+/* reaction click trigger */
   $("body").on("click", ".reaction", function(e){
     e.preventDefault();
     react($(this));
   });
+
+    /* Comment enter trigger */
+    $("body").on("keypress", ".add-comment", function(e){
+      if(e.which == 13 && !e.shiftKey)
+      {
+        e.preventDefault();
+        createComment($(this));
+      }
+    });
 
 
 

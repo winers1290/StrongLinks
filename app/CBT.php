@@ -57,7 +57,6 @@ class CBT extends Model
     if(Auth::check())
     {
       $reactions = \App\ObjectReaction::where([
-        ['user_id', Auth::user()->id],
         ['object_id', $cbt_id],
         ['object_type', self::$object_id]
         ])->get();
@@ -65,7 +64,10 @@ class CBT extends Model
       $Reactions['count'] = count($reactions);
       foreach($reactions as $r)
       {
-        $Reactions[$r->Emotion->emotion] = TRUE;
+        if($r->user_id == Auth::user()->id)
+        {
+          $Reactions[$r->Emotion->emotion] = TRUE;
+        }
       }
       return $Reactions;
     }
@@ -73,5 +75,28 @@ class CBT extends Model
     {
       $Reactions = NULL;
     }
+  }
+
+  public static function getCommentsCount($cbt_id)
+  {
+    $comments = \App\ObjectComment::where([
+      ['object_id', $cbt_id],
+      ['object_type', self::$object_id]
+    ])->count();
+
+    return $comments;
+  }
+
+  public static function getRecentComments($cbt_id)
+  {
+    $recentComments = \App\ObjectComment::where([
+      ['object_id', $cbt_id],
+      ['object_type', self::$object_id]
+    ])
+      ->limit(3)
+      ->orderBy('created_at', 'DESC')
+      ->get();
+
+      return $recentComments;
   }
 }

@@ -183,6 +183,10 @@ class Stream
             $Reactions = NULL;
             $Reactions = \App\Post::getReactions($Post->id);
 
+            $commentsCount = \App\Post::getCommentsCount($Post->id);
+
+            $recentComments = \App\Post::getRecentComments($Post->id);
+
             $this->formattedPosts[] =
               [
                 get_class($Post) =>
@@ -193,8 +197,9 @@ class Stream
                     'Emotions'          => $Emotions,
                     'Reactions'         => $Reactions,
                     'friendly_time'     => $Created->diffForHumans(),
-                    'total_comments'    => count($Post->Comments),
+                    'total_comments'    => $commentsCount,
                     'total_reactions'   => $Reactions['count'],
+                    'recentComments'    => $recentComments,
                   ],
               ];
 
@@ -228,6 +233,10 @@ class Stream
               $Reactions = NULL;
               $Reactions = \App\CBT::getReactions($Post->id);
 
+              $commentsCount = \App\CBT::getCommentsCount($Post->id);
+
+              $recentComments = \App\CBT::getRecentComments($Post->id);
+
               $this->formattedPosts[] =
                 [
                   get_class($Post) =>
@@ -242,8 +251,9 @@ class Stream
                       'Rational Thoughts'   => $Post->RationalThoughts->toArray(),
                       'friendly_time'       => $Created->diffForHumans(),
                       'total_reactions'     => $Reactions['count'],
-                      'total_comments'     => 0,
+                      'total_comments'     => $commentsCount,
                       'chart'             => $chart,
+                      'recentComments'    => $recentComments,
                     ],
                 ];
             break;

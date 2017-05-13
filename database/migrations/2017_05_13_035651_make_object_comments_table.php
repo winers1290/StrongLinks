@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePostCommentsTable extends Migration
+class MakeObjectCommentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +13,12 @@ class CreatePostCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('post_comments', function (Blueprint $table) {
+        Schema::create('object_comments', function (Blueprint $table) {
             $table->increments('id');
-	    $table->integer('post_id');
-	    $table->integer('user_id');
-	    $table->text('comment');
+            $table->integer('user_id');
+            $table->text('comment');
+            $table->integer('object_id');
+            $table->integer('object_type');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreatePostCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('post_comments');
+        Schema::dropIfExists('object_comments');
     }
 }
