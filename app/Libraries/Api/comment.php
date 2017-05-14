@@ -19,15 +19,16 @@ class comment
 
   private $Comment;
 
-    public function __construct($post_type, $post_id, $comment = NULL, $user, $comment_id = NULL, $method)
+    public function __construct($user, $post_type, $post_id)
     {
       //Load user
       $this->user = $user;
+      $this->post_id = $post_id;
 
       try
       {
         //First, let's grab the post_type ID;
-        $type = \App\ObjectType::where('type', $post_type)->firstOrFail();
+        $this->object_type = \App\ObjectType::where('type', $post_type)->firstOrFail();
       }
       catch(ModelNotFoundException $e)
       {
@@ -36,54 +37,39 @@ class comment
         abort(404);
       }
 
-      //Now, delegate depending on method
-      if($method === "DELETE")
-      {
-        //Load variables
-        $this->post_id = $post_id;
-        $this->object_type = $type;
-        $this->comment_id = $comment_id;
-
-        return $this->delete($type, $post_id, $user);
-      }
-      elseif($method == "PUT")
-      {
-        //Load variables
-        $this->comment = $comment;
-        $this->post_id = $post_id;
-        $this->object_type = $type;
-
-        return $this->put();
-      }
-      else
-      {
-        abort(403);
-      }
+      return $this;
     }
 
-    private function put()
+    public function put($comment_text)
     {
       $comment = new \App\ObjectComment;
       $comment->object_type = $this->object_type->id;
       $comment->object_id = $this->post_id;
       $comment->user_id = $this->user->id;
-      $comment->comment = $this->comment;
+      $comment->comment = $comment_text;
       $comment->save();
-      $this->Comment['Comment'] = $comment;
+
+      /* Due to the annoying fact that we need this as a collection, we need
+       * to re-find this in the database and load it... Very inefficient :/
+
+       * We also need to put the variable to be 'template friendly', hence
+       * the ['Post']['Comments'].
+      */
+      $this->Comment['Post']['Comments'][] = \App\ObjectComment::find($comment->id);
 
       $this->success = TRUE;
       $this->returnView = TRUE;
       return $this;
     }
 
-    private function delete()
+    public function delete($comment_id)
     {
       try
       {
         //Find the comment
         $comment = \App\ObjectComment::where([
-          'id'  => $this->comment_id,
-          'object_type' => $this->type->id,
+          'id'  => $comment_id,
+          'object_type' => $this->object_type->id,
           'object_id' => $this->post_id,
           'user_id' => $this->user->id
         ])->firstOrFail();
@@ -100,6 +86,28 @@ class comment
         $comment->delete();
         $this->success = TRUE;
       }
+      return $this;
+    }
+
+    public function get($commentsVisible = 3, $limit = 10)
+    {
+      /*
+       * We do not use "pages" because the amount of comments visible on the
+       * page is in flux as users add more comments. We simply offset by the number
+        * visible
+      */
+      $this->Comment['Post']['Comments'] =
+        \App\ObjectComment::where([
+          'object_type' => $this->object_type->id,
+          'object_id' => $this->post_id,
+        ])
+          ->orderBy('created_at', 'DESC')
+          ->limit($limit)
+          ->offset($commentsVisible) // = starting number of comments
+          ->get();
+
+      $this->success = TRUE;
+      $this->returnView = TRUE;
       return $this;
     }
 

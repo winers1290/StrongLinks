@@ -38,14 +38,20 @@ window.onscroll = function(ev) {
     react($(this));
   });
 
-    /* Comment enter trigger */
-    $("body").on("keypress", ".add-comment", function(e){
-      if(e.which == 13 && !e.shiftKey)
-      {
-        e.preventDefault();
-        createComment($(this));
-      }
-    });
+/* Comment enter trigger */
+$("body").on("keypress", ".add-comment", function(e){
+  if(e.which == 13 && !e.shiftKey)
+  {
+    e.preventDefault();
+    createComment($(this));
+  }
+});
+
+/* View more comments enter trigger */
+$("body").on("click", ".view-more-comments", function(e){
+    e.preventDefault();
+    loadComments($(this));
+});
 
 
 

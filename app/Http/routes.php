@@ -22,6 +22,8 @@
     Route::put('api/{post_type}/{post_id}/comment', 'Api@putComment');
     Route::delete('api/{post_type}/{post_id}/comment/{comment_id}', 'Api@deleteComment');
 
+    Route::get('{post_type}/{post_id}/comments/{comments_visible?}', 'Api@viewComments');
+
     Route::get('/logout', 'Home@Logout');
     Route::get('/', 'Home@Landing');
     Route::post('/', 'Home@Login');

@@ -12,8 +12,8 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-<script src="/js/functions.js?v=1.22"></script>
-<script src="/js/scripts.js?v=1.23"></script>
+<script src="/js/functions.js?v=1.23"></script>
+<script src="/js/scripts.js?v=1.24"></script>
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">

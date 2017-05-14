@@ -199,7 +199,7 @@ class Stream
                     'friendly_time'     => $Created->diffForHumans(),
                     'total_comments'    => $commentsCount,
                     'total_reactions'   => $Reactions['count'],
-                    'recentComments'    => $recentComments,
+                    'Comments'    => $recentComments,
                   ],
               ];
 
@@ -253,7 +253,7 @@ class Stream
                       'total_reactions'     => $Reactions['count'],
                       'total_comments'     => $commentsCount,
                       'chart'             => $chart,
-                      'recentComments'    => $recentComments,
+                      'Comments'    => $recentComments,
                     ],
                 ];
             break;

@@ -1,3 +1,4 @@
+@foreach($Post['Comments'] as $Comment)
 <tr>
   <td>
     <a href="{{url('/' . $Comment->Profile->User->username)}}">
@@ -6,3 +7,4 @@
     {{$Comment->comment}} <br> Like | Report
   </td>
 </tr>
+@endforeach

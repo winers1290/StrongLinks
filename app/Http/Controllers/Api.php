@@ -24,10 +24,8 @@ class Api extends Controller
   {
       $this->middleware('auth');
 
-      if(Auth::check())
-      {
-        $this->user = Auth::user();
-      }
+      $this->user = Auth::user();
+
 
   }
 
@@ -54,13 +52,13 @@ class Api extends Controller
 
   public function putReaction(Request $request, $post_type, $post_id, $emotion_id)
   {
-    $reaction = new reaction($post_type, $post_id, $emotion_id, Auth::user(), $request->method());
+    $reaction = new reaction($post_type, $post_id, $emotion_id, $this->user, $request->method());
     return response()->json($reaction->response());
   }
 
   public function deleteReaction(Request $request, $post_type, $post_id, $emotion_id)
   {
-    $reaction = new reaction($post_type, $post_id, $emotion_id, Auth::user(), $request->method());
+    $reaction = new reaction($post_type, $post_id, $emotion_id, $this->user, $request->method());
     return response()->json($reaction->response());
   }
 
@@ -79,14 +77,8 @@ class Api extends Controller
     }
     else
     {
-      $comment = new comment(
-        $post_type,
-        $post_id,
-        $request->comment,
-        Auth::user(),
-        NULL /*comment_id*/,
-        $request->method()
-      );
+      $comment = new comment(Auth::user(), $post_type, $post_id);
+      $comment->put($request->comment);
 
       //We want to return the HTML template for the new comment
       return view('templates.comment', $comment->response());
@@ -95,14 +87,16 @@ class Api extends Controller
 
   public function deleteComment(Request $request, $post_type, $post_id, $comment_id)
   {
-    $comment = new comment(
-      $post_type,
-      $post_id,
-      NULL /* comment text */,
-      Auth::user(),
-      $comment_id,
-      $request->method()
-    );
+    $comment = new comment($this->user, $post_type, $post_id);
+    $comment->delete($comment_id);
     return response()->json($comment->response());
+  }
+
+  public function viewComments(Request $request, $post_type, $post_id, $comments_visible = 3)
+  {
+    $comment = new comment($this->user, $post_type, $post_id);
+    $comment->get($comments_visible);
+
+    return view('templates.comment', $comment->response());
   }
 }

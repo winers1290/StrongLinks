@@ -2,6 +2,17 @@
 
 var page = 1; //The current page, for calculating pagination functions
 
+/*
+ * Looks like:
+    array[] =
+    [
+      0 => #id of comments section
+      1 => #current pagination
+  ]
+*/
+var commentsPage = new Array(); //Variable for tracking comments pagination on multiple (infinite) posts
+
+
 /* Generic AJAX handler */
 function ajaxCall(data = null, url, callback = function(data){}, errorCallback = function(data){}, dataType = "JSON", method = "POST", callbackObject = null)
 {
@@ -120,10 +131,9 @@ function createComment(item)
 
   var commentTable = $("table#comments-" + post_type + "-" + post_id);
 
-
   //Prepare the call
   var url = 'api/' + post_type + '/' + post_id + '/comment/';
-  var callback = function(data, callbackObject)
+  var callback = function(data)
   {
     //We need to dynamically add the comment
     commentTable.prepend(data);
@@ -135,4 +145,36 @@ function createComment(item)
   item.val('');
 
   ajaxCall(data, url, callback, errorCallback, dataType, method, item);
+}
+
+function loadComments(item)
+{
+  //Grab data about item
+  var post_id = item.attr('data-post-id');
+  var post_type = item.attr('data-post-type');
+  var commentTableString = "comments-" + post_type + "-" + post_id;
+  var commentTable = $("table#" + commentTableString);
+
+  //Count number of existing comments
+  var commentsTable = $("table#" + commentTableString + " tr");
+  var existingComments = commentsTable.length;
+
+  var method = "GET";
+  var url = post_type + '/' + post_id + '/comments/' + existingComments;
+  var callback = function(data)
+  {
+    //We need to dynamically add the comment
+    commentTable.append(data);
+  }
+  var errorCallback = function(data)
+  {
+    //Roll back if failed
+    console.log(arrayIndex);
+    commentsPage[arrayIndex][1] = commentsPage[arrayIndex][1] - 1;
+  }
+
+  var dataType = "HTML";
+  var data = null;
+  ajaxCall(data, url, callback, errorCallback, dataType, method, item);
+
 }

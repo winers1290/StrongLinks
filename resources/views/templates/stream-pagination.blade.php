@@ -96,22 +96,16 @@
   Comments ({{$Post['total_comments'] or ""}})
   @endif
 
-  <textarea placeholder="Type your comment" style="width: 100%"></textarea>
+  <textarea class="add-comment" data-post-type="{{$Post['Type']}}" data-post-id="{{$Post['Attributes']['id']}}" placeholder="Type your comment" style="width: 100%"></textarea>
 
-  <table class="table">
-  @foreach($Post['recentComments'] as $comment)
-  <tr>
-    <td>
-      <a href="{{url('/' . $comment->Profile->User->username)}}">
-      &#64;{{$comment->Profile->User->username}}
-      </a>
-      {{$comment->comment}} <br> Like | Report
-    </td>
-  </tr>
-  @endforeach
+  <table class="table" id="comments-{{$Post['Type']}}-{{$Post['Attributes']['id']}}">
+    @include('templates.comment')
 </table>
+
 @if($Post['total_comments'] > 3)
-View More
+<a class="view-more-comments" href="#" data-post-type="{{$Post['Type']}}" data-post-id="{{$Post['Attributes']['id']}}">
+  View More
+</a>
 @endif
 
 
