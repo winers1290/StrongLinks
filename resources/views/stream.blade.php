@@ -85,11 +85,13 @@
       </div>
       <div class="modal-body">
 
+        <div id="CBT-page-1">
+
         <div class="situation">
           <h4>Situation</h4>
           <p>What happened? When and where did it happen? What else was going on? Was it a situation that you often find yourself in? Who were you with?</p>
           <textarea style="width: 100%"></textarea>
-      </div>
+        </div>
 
       <div class="general_mood_before">
         <h4>How would you rate your overall mood?</h4>
@@ -120,7 +122,7 @@
               <td id="emotion-slider-output-1">1</td>
               <td>
                 <a href="#">
-                <i data-target="cbt-before-emotions-row-1" class="material-icons remove-emotion">delete</i>
+                <i data-target="cbt-before-emotions-row-1" class="material-icons remove">delete</i>
                 </a>
               </td>
             </tr>
@@ -131,11 +133,53 @@
         <button id="cbt_add_before_emotion">+</button>
       </div>
 
+    </div> <!-- CBT page 1 -->
+
+    <div id="CBT-page-2" class="hidden">
+
+      <div class="situation">
+        <h4>Automatic Thoughts</h4>
+        <p>Add one thougth per line. What was going through your mind at the time? Did anything in particular make you feel this way? What is the worse that could happen? How much do you believe each thought?</p>
+        <table class="table table-striped tabler-hover" id="cbt-automatic-thoughts-table">
+
+          <tbody>
+            <tr class="" id="cbt-automatic-thoughts-row-1">
+              <td>
+                <textarea id="automatic-thought-1" style="width: 100%"></textarea>
+              </td>
+
+              <td>
+                <input name="automatic-thought-severity-1" class="automatic-slider" data-output="automatic-slider-output-1" type="range" min="0" max="100" step="5" value="0">
+              </td>
+
+              <td id="automatic-slider-output-1">
+                  0%
+              </td>
+
+              <td>
+                <a href="#">
+                <i data-target="cbt-automatic-thoughts-row-1" class="material-icons remove">delete</i>
+                </a>
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+        <button id="cbt-add-automatic-thought">+</button>
+      </div>
+
+    </div> <!-- CBT Page 2 -->
+
+    <div id="CBT-page-3" class="hidden">
+      dfgdfgdfg
+    </div> <!-- CBT page 3 -->
+
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Next</button>
+        <button type="button" id="CBT-back" class="btn btn-primary hidden">Back</button>
+        <button type="button" id="CBT-next" class="btn btn-primary">Next</button>
       </div>
     </div>
   </div>

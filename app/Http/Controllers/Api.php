@@ -18,15 +18,9 @@ use App\Libraries\Api\comment;
 class Api extends Controller
 {
 
-  private $user;
-
   public function __construct()
   {
       $this->middleware('auth');
-
-      $this->user = Auth::user();
-
-
   }
 
   public function authenticated(Request $request)
@@ -52,13 +46,13 @@ class Api extends Controller
 
   public function putReaction(Request $request, $post_type, $post_id, $emotion_id)
   {
-    $reaction = new reaction($post_type, $post_id, $emotion_id, $this->user, $request->method());
+    $reaction = new reaction($post_type, $post_id, $emotion_id, Auth::user(), $request->method());
     return response()->json($reaction->response());
   }
 
   public function deleteReaction(Request $request, $post_type, $post_id, $emotion_id)
   {
-    $reaction = new reaction($post_type, $post_id, $emotion_id, $this->user, $request->method());
+    $reaction = new reaction($post_type, $post_id, $emotion_id, Auth::user(), $request->method());
     return response()->json($reaction->response());
   }
 
@@ -87,14 +81,14 @@ class Api extends Controller
 
   public function deleteComment(Request $request, $post_type, $post_id, $comment_id)
   {
-    $comment = new comment($this->user, $post_type, $post_id);
+    $comment = new comment(Auth::user(), $post_type, $post_id);
     $comment->delete($comment_id);
     return response()->json($comment->response());
   }
 
   public function viewComments(Request $request, $post_type, $post_id, $comments_visible = 3)
   {
-    $comment = new comment($this->user, $post_type, $post_id);
+    $comment = new comment(Auth::user(), $post_type, $post_id);
     $comment->get($comments_visible);
 
     return view('templates.comment', $comment->response());

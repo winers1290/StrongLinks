@@ -232,13 +232,66 @@ function addBeforeEmotion(item)
         <td id="emotion-slider-output-${rowCount + 1}">1</td>
         <td>
         <a href="#">
-          <i data-target="cbt-before-emotions-row-${rowCount + 1}" class="remove-emotion material-icons">delete</i>
+          <i data-target="cbt-before-emotions-row-${rowCount + 1}" class="remove material-icons">delete</i>
         </a>
         </td>
       </tr>
         `;
 
-    table.append(appendData);
+        table.append(appendData);
+    }
   }
 
-}
+  function addAutomaticThought(item)
+  {
+    //Grab table
+    var table = $('table#cbt-automatic-thoughts-table tbody');
+    //Count number of exiting rows
+    var rowCount = $('table#cbt-automatic-thoughts-table > tbody tr').length;
+
+    if(table.find('tr').hasClass('hidden'))
+    {
+      //Unhide first instance
+      table.find('tr').removeClass('hidden');
+    }
+
+    //Otherwise, dynamically generate
+    else if(rowCount < 10)
+    {
+      //Append new element
+      var appendData =
+          `
+        <tr id="cbt-automatic-thoughts-row-${rowCount + 1}">
+          <td>
+            <textarea id="automatic-thought-${rowCount + 1}" style="width: 100%"></textarea>
+          </td>
+          <td>
+            <input name=automatic-thought-severity-${rowCount + 1}" class="automatic-slider" data-output="automatic-slider-output-${rowCount + 1}" type="range" min="0" max="100" step="5" value="0">          </td>
+          </td>
+          <td id="automatic-slider-output-${rowCount + 1}">
+          0%
+          </td>
+          <td>
+          <a href="#">
+            <i data-target="cbt-automatic-thoughts-row-${rowCount + 1}" class="remove material-icons">delete</i>
+          </a>
+          </td>
+        </tr>
+          `;
+
+      table.append(appendData);
+    }
+
+  }
+
+  function page3Logic()
+  {
+    /*
+     * Here we need to grab each automatic thought
+     * and display it on the page with its own table.
+    */
+    //Automatic thoughts table
+    var table = $('table#cbt-automatic-thoughts-table tbody');
+    //Count number of exiting rows
+    var rowCount = $('table#cbt-automatic-thoughts-table > tbody tr').length;
+  }

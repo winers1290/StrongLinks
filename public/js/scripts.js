@@ -45,7 +45,8 @@ $('#cbt_add_before_emotion').on('click', function(e)
   });
 
 //Monitor delete button for clicks
-$('#newCBT').on('click', '.remove-emotion', function(e) {
+//Will only hide the last instance, not remove it (for business logic reasons)
+$('#newCBT').on('click', '.remove', function(e) {
 
   if($(this).attr('data-target') != null)
   {
@@ -65,6 +66,85 @@ $('#newCBT').on('click', '.remove-emotion', function(e) {
   }
 
 });
+
+//Next button
+var nextButton = $('button#CBT-next');
+var backButton = $('button#CBT-back');
+//Array of the pages within the modal
+var pages = [$('div#CBT-page-1'), $('div#CBT-page-2'), $('div#CBT-page-3')];
+
+nextButton.on('click', function(e){
+
+  var currentPage = 0;
+  e.preventDefault();
+  //Find out what page we're currently on
+  $.each(pages, function(index){
+    if(!$(this).hasClass('hidden'))
+    {
+      //Gottcha
+      currentPage = index;
+      return false;
+    }
+  });
+
+  //Next page has to be > 1, so unhide back button
+  backButton.removeClass('hidden');
+
+  /* Individual page logic here */
+  if((currentPage + 1) == 2) //page 3
+  {
+    page3Logic();
+  }
+
+  //So now hide current page, unhide next page
+  pages[currentPage].addClass('hidden');
+  pages[currentPage + 1].removeClass('hidden');
+
+});
+
+
+backButton.on('click', function(e){
+
+  var currentPage = 0;
+  e.preventDefault();
+  //Find out what page we're currently on
+  $.each(pages, function(index){
+    if(!$(this).hasClass('hidden'))
+    {
+      //Gottcha
+      currentPage = index;
+      return false;
+    }
+  });
+
+  //If is first page, hide back button
+  if((currentPage - 1) == 0)
+  {
+    backButton.addClass('hidden');
+  }
+
+  //So now hide current page, unhide next page
+  pages[currentPage].addClass('hidden');
+  pages[currentPage - 1].removeClass('hidden');
+
+});
+
+//Monitor automatic thought sliders for changes
+  $('#newCBT').on("mousemove change", ".automatic-slider", function(e) {
+
+    if($(this).attr('data-output') != null)
+    {
+      var target = $('#' + $(this).attr('data-output'));
+      target.html($(this).val() + '%');
+    }
+
+  });
+
+  //On add new automatic thought
+  $('#cbt-add-automatic-thought').on('click', function(e)
+  {
+    addAutomaticThought($(this));
+  });
 
 
 /* CBT sliders end */
