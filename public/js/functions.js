@@ -137,6 +137,14 @@ function createComment(item)
   {
     //We need to dynamically add the comment
     commentTable.prepend(data);
+
+    //Update total comments count
+    var totalCount = $('span#total-comments-' + post_type + '-' + post_id);
+    var text = totalCount.text();
+    var number = text.replace(/[()]/g, "");
+    console.log(number);
+
+    totalCount.text('(' + (parseInt(number) + 1) + ')');
   }
   var errorCallback = function(data) {}
   var dataType = "HTML";
@@ -165,11 +173,20 @@ function loadComments(item)
   {
     //We need to dynamically add the comment
     commentTable.append(data);
+
+    //Reassess number of comments to see is < 10
+    var newCommentsTable = $("table#" + commentTableString + " tr");
+    var newCommentsNumber = newCommentsTable.length;
+    if(newCommentsNumber - existingComments < 10)
+    {
+      //Remove "view more" sticker
+      var viewMore = $('a#view-more-comments-' + post_type + '-' + post_id);
+      viewMore.addClass('hidden');
+    }
   }
   var errorCallback = function(data)
   {
     //Roll back if failed
-    console.log(arrayIndex);
     commentsPage[arrayIndex][1] = commentsPage[arrayIndex][1] - 1;
   }
 

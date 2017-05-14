@@ -9,6 +9,21 @@ html, body {
 }
 
 /*
+ * 0.1 Bootstrap corrections/modifications
+*/
+.modal {
+  overflow-y: auto;
+}
+
+.modal-open {
+  overflow: auto;
+}
+
+.modal-open[style] {
+  padding-right: 0px !important;
+}
+
+/*
     #############################################
     1.0 Emotions Section
     #############################################

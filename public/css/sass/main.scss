@@ -10,6 +10,24 @@ html, body
   overflow-x: hidden;
 }
 
+/*
+ * 0.1 Bootstrap corrections/modifications
+*/
+
+//Fix modal shift to the left
+.modal {
+    overflow-y: auto;
+}
+
+.modal-open {
+    overflow: auto;
+}
+
+.modal-open[style] {
+    padding-right: 0px !important;
+}
+
+
 
 /*
     #############################################

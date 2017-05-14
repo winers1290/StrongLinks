@@ -11,10 +11,7 @@
 </div> <!-- stream-wrapper -->
 @endif <!-- if(count($Stream) > 0) -->
 
-<p><b>View more posts</b></p>
 
-
-<a href="{{url('/logout')}}">Logout</a>
 @endsection
 
 
@@ -24,6 +21,10 @@
 @section('create')
 
 @include('common.errors')
+
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newCBT-page1">
+  New CBT Record
+</button>
 
 <form action="{{url('/create')}}" method="POST">
 {{ csrf_field() }}
@@ -69,5 +70,28 @@
 
 </form>
 
+
+@endsection
+
+@section('modals')
+
+<!-- Modal -->
+<div class="modal fade" id="newCBT-page1" tabindex="-1" role="dialog" aria-labelledby="newCBT-page1-Label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">New CBT Record</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 @endsection

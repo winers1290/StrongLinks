@@ -17,7 +17,7 @@
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet" href="/css/sass/main.css?v=1.912">
+<link rel="stylesheet" href="/css/sass/main.css?v=2.02">
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -76,6 +76,8 @@
 
 	</div> <!-- col-sm-10 offset-1 -->
 	</div> <!-- row -->
+
+    @yield('modals')
 
     <footer>
 

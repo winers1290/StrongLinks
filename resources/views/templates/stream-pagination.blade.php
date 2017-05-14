@@ -93,7 +93,10 @@
 
 <div class="panel-footer">
   @if($Post['total_comments'] > 0)
-  Comments ({{$Post['total_comments'] or ""}})
+  Comments
+  <span id="total-comments-{{$Post['Type']}}-{{$Post['Attributes']['id']}}">
+    ({{$Post['total_comments'] or ""}})
+  </span>
   @endif
 
   <textarea class="add-comment" data-post-type="{{$Post['Type']}}" data-post-id="{{$Post['Attributes']['id']}}" placeholder="Type your comment" style="width: 100%"></textarea>
@@ -103,7 +106,7 @@
 </table>
 
 @if($Post['total_comments'] > 3)
-<a class="view-more-comments" href="#" data-post-type="{{$Post['Type']}}" data-post-id="{{$Post['Attributes']['id']}}">
+<a id="view-more-comments-{{$Post['Type']}}-{{$Post['Attributes']['id']}}" class="view-more-comments" href="#" data-post-type="{{$Post['Type']}}" data-post-id="{{$Post['Attributes']['id']}}">
   View More
 </a>
 @endif
