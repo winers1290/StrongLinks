@@ -25,6 +25,50 @@ $.each(rangeSliders, function(index) {
   });
 });
 
+/* CBT  */
+
+//On add new before emotion
+$('#cbt_add_before_emotion').on('click', function(e)
+{
+  addBeforeEmotion($(this));
+});
+
+//Monitor emotion sliders for changes
+  $('#newCBT').on("mousemove change", ".emotion-slider", function(e) {
+
+    if($(this).attr('data-output') != null)
+    {
+      var target = $('#' + $(this).attr('data-output'));
+      target.html($(this).val());
+    }
+
+  });
+
+//Monitor delete button for clicks
+$('#newCBT').on('click', '.remove-emotion', function(e) {
+
+  if($(this).attr('data-target') != null)
+  {
+    var target = $('#' + $(this).attr('data-target'));
+    var id = target.attr('id');
+    var numberArray = id.split('-');
+    var number = numberArray[numberArray.length - 1];
+    if(number == 1)
+    {
+      target.addClass('hidden');
+    }
+    else
+    {
+      target.remove();
+    }
+
+  }
+
+});
+
+
+/* CBT sliders end */
+
 
 window.onscroll = function(ev) {
     if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {

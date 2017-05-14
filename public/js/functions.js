@@ -195,3 +195,50 @@ function loadComments(item)
   ajaxCall(data, url, callback, errorCallback, dataType, method, item);
 
 }
+
+/* CBT Login */
+
+function addBeforeEmotion(item)
+{
+  //Grab table
+  var table = $('table#cbt-before-emotions-table tbody');
+  //Count number of exiting rows
+  var rowCount = $('table#cbt-before-emotions-table > tbody tr').length;
+
+  //Grab existing emotion options
+  var emotionList = $('select[name=cbt-emotion-list-1]').html();
+
+  if(table.find('tr').hasClass('hidden'))
+  {
+    //Unhide first instance
+    table.find('tr').removeClass('hidden');
+  }
+
+  //Otherwise, dynamically generate
+  else if(rowCount < 5)
+  {
+    //Append new element
+    var appendData =
+        `
+      <tr id="cbt-before-emotions-row-${rowCount + 1}">
+        <td>
+          <select name="cbt-emotion-list-${rowCount + 1}">
+            ${emotionList}
+          <select>
+        </td>
+        <td>
+          <input class="emotion-slider" name="cbt-emotion-severity-${rowCount + 1}" data-output="emotion-slider-output-${rowCount + 1}" type="range" min="1" max="5" step="1" value="0">
+        </td>
+        <td id="emotion-slider-output-${rowCount + 1}">1</td>
+        <td>
+        <a href="#">
+          <i data-target="cbt-before-emotions-row-${rowCount + 1}" class="remove-emotion material-icons">delete</i>
+        </a>
+        </td>
+      </tr>
+        `;
+
+    table.append(appendData);
+  }
+
+}

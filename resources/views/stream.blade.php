@@ -22,7 +22,7 @@
 
 @include('common.errors')
 
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newCBT-page1">
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newCBT">
   New CBT Record
 </button>
 
@@ -76,7 +76,7 @@
 @section('modals')
 
 <!-- Modal -->
-<div class="modal fade" id="newCBT-page1" tabindex="-1" role="dialog" aria-labelledby="newCBT-page1-Label">
+<div class="modal fade" id="newCBT" tabindex="-1" role="dialog" aria-labelledby="newCBT-Label">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -84,7 +84,54 @@
         <h4 class="modal-title" id="myModalLabel">New CBT Record</h4>
       </div>
       <div class="modal-body">
-        ...
+
+        <div class="situation">
+          <h4>Situation</h4>
+          <p>What happened? When and where did it happen? What else was going on? Was it a situation that you often find yourself in? Who were you with?</p>
+          <textarea style="width: 100%"></textarea>
+      </div>
+
+      <div class="general_mood_before">
+        <h4>How would you rate your overall mood?</h4>
+        <table class="table">
+          <tr>
+            <td>1</td>
+            <td><input type="range" min="0" max="10" step="1" value="0"></td>
+            <td>10</td>
+          </tr>
+        </table>
+
+      </div>
+
+      <div class="before_emotions">
+        <h4>Are you feeling any specific emotions?</h4>
+        <table class="table table-striped tabler-hover" id="cbt-before-emotions-table">
+
+          <tbody>
+            <tr class="hidden" id="cbt-before-emotions-row-1">
+              <td>
+                <select name="cbt-emotion-list-1">
+                  @foreach($Emotions as $Emotion)
+                  <option value="{{$Emotion['id']}}">{{$Emotion['emotion']}}</option>
+                  @endforeach
+                </select>
+              </td>
+              <td><input class="emotion-slider" data-output="emotion-slider-output-1" name="cbt-emotion-severity-1" type="range" min="1" max="5" step="1" value="0"></td>
+              <td id="emotion-slider-output-1">1</td>
+              <td>
+                <a href="#">
+                <i data-target="cbt-before-emotions-row-1" class="material-icons remove-emotion">delete</i>
+                </a>
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+        <button id="cbt_add_before_emotion">+</button>
+      </div>
+
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
