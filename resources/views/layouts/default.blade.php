@@ -1,23 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 
 <title>Laravel</title>
 
 <meta name="csrf_token" content="{{ csrf_token() }}">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js?v=1.0"></script>
 
 
 <!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
-<script src="/js/functions.js?v=1.24"></script>
-<script src="/js/scripts.js?v=1.25"></script>
+<script src="/js/functions.js?v=1.25"></script>
+<script src="/js/scripts.js?v=1.26"></script>
 
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet" href="/css/sass/main.css?v=2.02">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+<link rel="stylesheet" href="/css/sass/main.css?v=2.04">
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -25,64 +27,73 @@
 
 </head>
 
-    <body>
+<body>
+<div class="page">
 
-      <nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
+    <!-- Main Navigation Element -->
+    <nav class="navbar navbar-toggleable-md navbar-light bg-faded fixed-top">
+
+      <!-- Mobile/Tablet Responsive Dropdown menu -->
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">Brand</a>
-    </div>
+      <!-- Mobile/Tablet Responsive Dropdown menu -->
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="{{url('/stream')}}">Home</a></li>
-        <li><a href="{{url('/profile')}}">Profile</a></li>
-      </ul>
+      <!-- Brand -->
+      <a class="navbar-brand" href="#">Navbar</a>
+      <!-- Brand -->
 
-      <form class="navbar-form navbar-left">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="{{url('/logout')}}">Logout</a></li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
+      <!-- Nav links -->
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link" href="{{url('/stream')}}">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-item nav-link" href="{{url('/profile')}}">Profile</a>
+          <!-- User Dropdown -->
+          <div class="nav-item dropdown hidden-md-below">
+            <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              User
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="{{url('/logout')}}">Logout</a>
+            </div>
+          </div>
+          <!-- User Dropdown -->
+          </div>
+      </div> <!-- collapse navbar-collapse -->
+      <!-- Nav links -->
+    </nav>
+    <!-- Main Navigation Element -->
 
-	<div class="row">
-	<div class="col-sm-10 col-sm-offset-1">
+@hasSection('beforeContainer')
+  @yield('beforeContainer')
+@endif
 
 
-    @if(Auth::check())
-		<div class="row">
-		<div class="col-sm-8 col-sm-offset-2">
-        @yield('create')
-		</div>
-		</div>
-    @endif
+<div id="page-container" class="container">
 
-    @yield('content')
+@if(Auth::check())
+<!-- The main post creation element -->
 
-	</div> <!-- col-sm-10 offset-1 -->
-	</div> <!-- row -->
+@yield('create')
 
-    @yield('modals')
+<!-- The main post creation element -->
+@endif
 
-    <footer>
+<!-- the page content -->
+@yield('content')
+<!-- the page content -->
 
-    </footer>
+</div> <!-- page container -->
 
-    </body>
+<!-- page modals start here -->
+@yield('modals')
+<!-- page modals end here -->
+
+
+<footer>
+
+</footer>
+</div> <!-- page -->
+</body>
 
 </html>

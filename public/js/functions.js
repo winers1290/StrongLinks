@@ -206,16 +206,10 @@ function addBeforeEmotion(item)
   var rowCount = $('table#cbt-before-emotions-table > tbody tr').length;
 
   //Grab existing emotion options
-  var emotionList = $('select[name=cbt-emotion-list-1]').html();
-
-  if(table.find('tr').hasClass('hidden'))
-  {
-    //Unhide first instance
-    table.find('tr').removeClass('hidden');
-  }
+  var emotionList = $('select#list-of-emotions').html();
 
   //Otherwise, dynamically generate
-  else if(rowCount < 5)
+  if(rowCount < 6)
   {
     //Append new element
     var appendData =
@@ -268,7 +262,7 @@ function addBeforeEmotion(item)
           <td>
             <input name=automatic-thought-severity-${rowCount + 1}" class="automatic-slider" data-output="automatic-slider-output-${rowCount + 1}" type="range" min="0" max="100" step="5" value="0">          </td>
           </td>
-          <td id="automatic-slider-output-${rowCount + 1}">
+          <td id="automatic-slider-output-${rowCount + 1}" data-type="automatic-thought-belief">
           0%
           </td>
           <td>
@@ -286,12 +280,286 @@ function addBeforeEmotion(item)
 
   function page3Logic()
   {
+
     /*
      * Here we need to grab each automatic thought
      * and display it on the page with its own table.
     */
     //Automatic thoughts table
-    var table = $('table#cbt-automatic-thoughts-table tbody');
+    var table = $('table#cbt-automatic-thoughts-table > tbody');
+    var textAreas = table.find('textarea');
+    var thoughtTable = $('div#automatic-thought-table-wrapper');
+
+    //Sorts automatic thoughts into array
+    var automaticThoughts = new Array();
+
+    $.each(textAreas, function(index) {
+      automaticThoughts.push($(this).val());
+    });
+
+
+    var template;
+    for(var i = 0; i < automaticThoughts.length; i++)
+    {
+      //Now we can mockup the table for page 3
+      template =
+      `
+      <table class="table table-striped" id="automatic-thought-evidence-${i + 1}">
+
+        <thead>
+          <tr>
+            <td id="automatic-thought-title-${i + 1}">
+              ${automaticThoughts[i]}
+            </td>
+          </tr>
+        </thead>
+
+        <tbody id="automatic-thought-evidence-body-${i + 1}">
+
+          <tr id="automatic-thought-evidence-row-${i + 1}-1">
+            <td><textarea name="automatic-thought-evidence-text-${i + 1}-1" style="width: 100%;"></textarea></td>
+            <td>
+              <input type="radio" name="evidence-supportive-${i + 1}-1" value="true">Supports<br>
+              <input type="radio" name="evidence-supportive-${i + 1}-1" value="false">Does not Support<br>
+            </td>
+            <td>
+            <a href="#">
+              <i data-target="automatic-thought-evidence-row-${i + 1}-1" class="remove material-icons">delete</i>
+            </a>
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+      <button data-target="automatic-thought-evidence-body-${i + 1}" class="addAutomaticThoughtEvidence">+</button>
+      `;
+
+      if(i == 0)
+      {
+        //Wipe for first iteration
+        thoughtTable.html(template);
+      }
+      else
+      {
+        //Otherwise, append
+        thoughtTable.append(template);
+      }
+
+    }
+
+  }
+
+  function page5Logic()
+  {
+    /*
+     * Here we need to grab each automatic thought
+     * and display it on the page with its own table.
+    */
+    //Automatic thoughts table
+    var table = $('table#cbt-automatic-thoughts-table > tbody');
+    //Automatic Thoughts
+    var textAreas = table.find('textarea');
+    //Automatic Thought percentage
+    var percentages = table.find('[data-type="automatic-thought-belief"]');
+
+    //Current page table
+    var thoughtTable = $('table#automatic-thoughts-revisit tbody');
+
+    //Sorts automatic thoughts into array
+    var automaticThoughts = new Array();
+    //Sort percentages into array
+    var automaticThoughtPercentages = new Array();
+
+    $.each(textAreas, function(index) {
+      automaticThoughts.push($(this).val());
+    });
+
+    $.each(percentages, function(index) {
+      automaticThoughtPercentages.push($(this).html()); //Inner value
+    });
+
+    var template;
+    for(var i = 0; i < automaticThoughts.length; i++)
+    {
+      template =
+      `
+        <tr>
+        <td>${automaticThoughts[i]}</td>
+        <td>${automaticThoughtPercentages[i]}</td>
+        <td>
+          <input name="automatic-thought-revist-severity-${i + 1}" class="automatic-slider" data-output="automatic-slider-revist-output-${i + 1}" type="range" min="0" max="100" step="5" value="0">
+        </td>
+        <td id="automatic-slider-revist-output-${i + 1}">
+            0%
+        </td>
+        </tr>
+      `;
+
+      if(i == 0)
+      {
+        thoughtTable.html(template);
+      }
+      else
+      {
+        thoughtTable.append(template);
+      }
+
+    }
+
+  }
+
+  function page6Logic()
+  {
+    var generalRevisit = $('table#general-mood-revisit tbody');
+    var emotionsRevisit = $('table#emotions-revisit tbody')
+
+    //Get value of initial general mood
+    var emotionSlider = $('input[name="general-mood-slider"]');
+
+    //Now grab the emotions + severities
+    var emotionsTable = $('#cbt-before-emotions-table tbody');
+    //Count number of rows
+    var emotionsRows = emotionsTable.find('tr');
+    var rowCount = emotionsRows.length;
+    var emotionValues = new Array();
+
+    $.each(emotionsRows, function(index) {
+      // 0 => emotion, 1 => severity
+      var emotionID = $('select[name="cbt-emotion-list-' + (index + 1) +'"]').val();
+      var emotionText = $('select[name="cbt-emotion-list-' + (index + 1) +'"] option[value="' + emotionID + '"]').text();
+      var emotionSeverity = $('input[name="cbt-emotion-severity-' + (index + 1) + '"]').val();
+
+      var template =
+      `
+      <tr>
+      <td>${emotionText}</td>
+      <td>${emotionSeverity}</td>
+      <td><input name="emotion-severity-after-${index + 1}" data-percentage="none" class="automatic-slider" data-output="emotion-severity-after-${index + 1}" type="range" min="0" max="10" step="1" value="${emotionSeverity}"></td>
+      <td id="emotion-severity-after-${index + 1}">${emotionSeverity}</td>
+      </tr>
+      `;
+      if(index == 0)
+      {
+        emotionsRevisit.html(template);
+      }
+      else
+      {
+        emotionsRevisit.append(template);
+      }
+    });
+
+    //Append mood
+    var template =
+    `
+      <tr>
+      <td>${emotionSlider.val()}</td>
+      <td><input name="general-mood-after-slider" data-percentage="none" class="automatic-slider" data-output="general-mood-after-display" type="range" min="0" max="10" step="1" value="${emotionSlider.val()}"></td>
+      <td id="general-mood-after-display">${emotionSlider.val()}</td>
+      </tr>
+    `;
+
+    generalRevisit.html(template);
+
+  }
+
+  function page7Logic()
+  {
+
+  }
+
+  function addAutomaticThoughtEvidence(item)
+  {
+    var target = $('#' + item.attr('data-target')); //tbody
+    //Get automatic thought id form data-target
+    var atID = item.attr('data-target').split('-');
+    atID = atID[atID.length - 1];
+
+    //Find how many existing rows
+    var countRows = target.find('tr').length;
+
+    if(countRows < 7)
+    {
+      var template =
+      `
+      <tr id="automatic-thought-evidence-row-${atID}-${countRows + 1}">
+        <td><textarea name="automatic-thought-evidence-text-${atID}-${countRows + 1}" style="width: 100%;"></textarea></td>
+        <td>
+          <input type="radio" name="evidence-supportive-${atID}-${countRows + 1}" value="true">Supports<br>
+          <input type="radio" name="evidence-supportive-${atID}-${countRows + 1}" value="false">Does not Support<br>
+        </td>
+        <td>
+        <a href="#">
+          <i data-target="automatic-thought-evidence-row-${atID}-${countRows + 1}" class="remove material-icons">delete</i>
+        </a>
+        </td>
+      </tr>
+      `;
+
+      target.append(template);
+    }
+
+  }
+
+  function addRationalThought(item)
+  {
+    //Grab table
+    var table = $('table#cbt-rational-thoughts-table tbody');
     //Count number of exiting rows
-    var rowCount = $('table#cbt-automatic-thoughts-table > tbody tr').length;
+    var rowCount = $('table#cbt-rational-thoughts-table > tbody tr').length;
+
+    if(table.find('tr').hasClass('hidden'))
+    {
+      //Unhide first instance
+      table.find('tr').removeClass('hidden');
+    }
+
+    //Otherwise, dynamically generate
+    else if(rowCount < 10)
+    {
+      //Append new element
+      var appendData =
+          `
+        <tr id="cbt-rational-thoughts-row-${rowCount + 1}">
+          <td>
+            <textarea name="rational-thought-${rowCount + 1}" style="width: 100%"></textarea>
+          </td>
+          <td>
+          <a href="#">
+            <i data-target="cbt-rational-thoughts-row-${rowCount + 1}" class="remove material-icons">delete</i>
+          </a>
+          </td>
+        </tr>
+          `;
+
+      table.append(appendData);
+    }
+
+    }
+
+  function CBTSubmitLogic()
+  {
+    //This is going to be a long one...
+    var searchArea = $('#newCBT');
+
+
+      //Find stuff
+      var dataArray = new Array();
+      var test = searchArea.find('textarea, input[type!="radio"], input[type="radio"]:checked, select');
+      $.each(test, function(e){
+        //Only iterate if disabled
+          if(!$(this).is(':disabled'))
+          {
+            if($(this).attr('name') != null)
+            {
+              console.log($(this).attr('name') + " => " + $(this).val());
+            }
+            else
+            {
+              console.log($(this).attr('id') + " => " + $(this).val());
+            }
+          }
+
+      });
+
   }

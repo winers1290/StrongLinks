@@ -24,6 +24,9 @@ class Stream
   //Array of errors occured throughout execution
   private $errors = [];
 
+  //Do we need to redirect to /profile?
+  private $redirectNeeded;
+
   /*
    * The Create() function will return all the data you need to display
    * information in Stream format for the user.
@@ -63,19 +66,20 @@ class Stream
         {
           //This page doesn't exist
           $this->errors[] = "Username does not exist";
-          return FALSE;
+          return $this;
         }
 
         /*
          * If they're accessing their own profile, we want to redirect
          * them to a nice link /profile
         */
-        /*
         if($User->id == Auth::user()->id)
         {
-          return redirect()->route('stream', ['profile', $offset]);
+          $this->errors[] = "Please redirect to profile";
+          $this->redirectNeeded = TRUE;
+          return $this;
         }
-        */
+
 
       }
     }
@@ -347,6 +351,18 @@ class Stream
       return FALSE;
     }
 
+  }
+
+  public function isRedirect()
+  {
+    if($this->redirectNeeded === TRUE)
+    {
+      return TRUE;
+    }
+    else
+    {
+      return FALSE;
+    }
   }
 
   public function Validate()

@@ -1,3 +1,4 @@
+/* Colour palletes */
 /*
     #############################################
     0.0 Body & HTML
@@ -6,21 +7,222 @@
 html, body {
   max-width: 100%;
   overflow-x: hidden;
+  background-color: #f5f8fa;
+}
+
+/* main page wrapper */
+div.page #page-container {
+  margin-top: 75px;
 }
 
 /*
- * 0.1 Bootstrap corrections/modifications
+ * 0.1 Profile Cover Picture ------------------------------------------
+ * This is the main header wrapper for our profile
+ * within it, it has lots of stuff, like the profile pic,
+ * and menu wrappers.
+ * When the user scrolls down, its becomes fixed.
 */
-.modal {
-  overflow-y: auto;
+div.profile-cover-img {
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed !important;
+  overflow: hidden;
 }
 
-.modal-open {
-  overflow: auto;
+div.profile-cover-img::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: inherit;
+  background-attachment: fixed;
+  -webkit-filter: blur(2px);
+  filter: blur(2px);
 }
 
-.modal-open[style] {
-  padding-right: 0px !important;
+div.profile-cover-img.active {
+  top: 0;
+  position: fixed;
+  z-index: 100;
+}
+
+div.profile-cover-img > div.profile-wrapper {
+  position: absolute;
+  bottom: 50px;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+div.profile-cover-img > div.profile-wrapper p,
+div.profile-cover-img > div.profile-wrapper h1 {
+  color: white;
+  text-shadow: 0px 0px 10px black;
+}
+
+div.profile-cover-img div.cover-menu-bar {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+div.profile-cover-img > div.cover-menu-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  text-align: center;
+}
+
+div.profile-cover-img > div.cover-menu-wrapper div.triangle {
+  position: absolute;
+  bottom: 0;
+  content: '';
+  margin-left: -10px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #fff;
+  transition: left .7s;
+}
+
+div.profile-cover-img > div.cover-menu-wrapper > span {
+  cursor: pointer;
+  position: relative;
+  z-index: 10;
+  font-size: 1.3rem;
+  line-height: 50px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  -webkit-font-smoothing: subpixel-antialiased;
+  /* or antialiased; */
+  text-rendering: optimizeLegibility;
+}
+
+div.profile-cover-img > div.cover-menu-wrapper > span.active::after {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: -11.5px;
+  left: 50%;
+  content: '';
+  margin-left: -10px;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #fff;
+}
+
+div.profile-cover-img img.cover-profile-picture {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  max-width: 100px;
+  display: inline-block;
+}
+
+@media (min-width: 575px), (max-width: 575px) {
+  div.profile-cover-img {
+    height: 300px;
+  }
+  div.profile-cover-img.active {
+    margin-top: -181px;
+  }
+}
+
+@media (min-width: 768px) {
+  div.profile-cover-img {
+    height: 300px;
+  }
+  div.profile-cover-img.active {
+    margin-top: -181px;
+  }
+}
+
+@media (min-width: 992px) {
+  div.profile-cover-img {
+    height: 300px;
+  }
+  div.profile-cover-img.active {
+    margin-top: -181px;
+  }
+}
+
+@media (min-width: 1100px) {
+  div.profile-cover-img {
+    height: 300px;
+  }
+  div.profile-cover-img.active {
+    margin-top: -181px;
+  }
+}
+
+@media (min-width: 1200px) {
+  div.profile-cover-img {
+    height: 340px;
+  }
+  div.profile-cover-img.active {
+    margin-top: -219px;
+  }
+}
+
+@media (min-width: 1370px) {
+  div.profile-cover-img {
+    height: 380px;
+  }
+  div.profile-cover-img.active {
+    margin-top: -259px;
+  }
+}
+
+@media (min-width: 1450px) {
+  div.profile-cover-img {
+    height: 420px;
+  }
+  div.profile-cover-img.active {
+    margin-top: -299px;
+  }
+}
+
+@media (min-width: 1510px) {
+  div.profile-cover-img {
+    height: 460px;
+  }
+  div.profile-cover-img.active {
+    margin-top: -339px;
+  }
+}
+
+@media (min-width: 1670px) {
+  div.profile-cover-img {
+    height: 500px;
+  }
+  div.profile-cover-img.active {
+    margin-top: -379px;
+  }
+}
+
+@media (min-width: 1820px) {
+  div.profile-cover-img {
+    height: 540px;
+  }
+  div.profile-cover-img.active {
+    margin-top: -419px;
+  }
+}
+
+/*
+ * 0.2 Create posts box ------------------------------------------
+ */
+div.create-wrapper > textarea {
+  border-radius: 1rem;
 }
 
 /*
@@ -225,12 +427,5 @@ ul.automatic_thought_list {
     3.0 Create Events Section
     #############################################
 */
-textarea.create-box,
-input.create-box,
-select.create-box {
-  width: 80%;
-  margin-top: 20px;
-  margin-left: 10%;
-}
 
 /*# sourceMappingURL=main.css.map */

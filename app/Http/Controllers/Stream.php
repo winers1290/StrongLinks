@@ -51,27 +51,42 @@ class Stream extends Controller
       /* If the request type is POST, user is dynamically requesting content */
       if($request === 'POST')
       {
-        return view('templates.stream-pagination', $Data);
+        return view('templates.stream-items', $Data);
       }
       /* Otherwise, user is just accessing the page */
       else
       {
-        return view('stream', $Data);
+        if($stream_type == "profile")
+        {
+          return view('users.profile', $Data);
+        }
+        else
+        {
+          return view('users.stream', $Data);
+        }
       }
     }
 
     else
     {
-      /* POST requests need to return JSON */
-      if($request === 'POST')
+      if($Stream->isRedirect())
       {
-        return response()->json(FALSE);
+        return redirect('/profile');
       }
-      /* Everything else... */
       else
       {
-        abort('404');
+        /* POST requests need to return JSON */
+        if($request === 'POST')
+        {
+          return response()->json(FALSE);
+        }
+        /* Everything else... */
+        else
+        {
+          abort('404');
+        }
       }
+
     }
   }
 

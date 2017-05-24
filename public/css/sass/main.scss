@@ -1,3 +1,41 @@
+//Variables
+$screen-sizes: "575", "768", "992", "1100", "1200", "1370", "1450", "1510", "1670", "1820";
+$sizes-count: length($screen-sizes);
+
+$major-screen-sizes: "575", "768", "992", "1200";
+$major-sizes-count: length($major-screen-sizes);
+
+@mixin mediaQueries
+{
+  @each $size in $screen-sizes //For all screen sizes
+  {
+    $i: index($screen-sizes, $size) !global;
+
+    $query: "(min-width: " + $size + "px)";
+    @if $i == 1
+    {
+        $query: "(min-width: " + $size + "px), (max-width: " + $size + "px)"; //First screen size needs to be both min and max
+    }
+
+    @media #{unquote($query)} //First screen size should be max
+    {
+      @content;
+    }
+  }
+}
+
+
+
+/* Colour palletes */
+$grey: "#6d6e71";
+
+@mixin text-shadow()
+{
+  text-shadow: 1px 1px 2px rgba(0,0,0,.6);
+  -webkit-font-smoothing: subpixel-antialiased; /* or antialiased; */
+  text-rendering: optimizeLegibility;
+}
+
 /*
     #############################################
     0.0 Body & HTML
@@ -8,26 +46,197 @@ html, body
 {
   max-width: 100%;
   overflow-x: hidden;
+  background-color: #f5f8fa;
+}
+
+/* main page wrapper */
+div.page
+{
+  #page-container //content begins
+  {
+    margin-top: 75px;
+  }
 }
 
 /*
- * 0.1 Bootstrap corrections/modifications
+ * 0.1 Profile Cover Picture ------------------------------------------
+ * This is the main header wrapper for our profile
+ * within it, it has lots of stuff, like the profile pic,
+ * and menu wrappers.
+ * When the user scrolls down, its becomes fixed.
 */
+div.profile-cover-img //general wrapper
+{
 
-//Fix modal shift to the left
-.modal {
-    overflow-y: auto;
+  &::before //We want the first 50px blurred, so we can put a nav ontop
+  {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: inherit;
+    background-attachment: fixed;
+    -webkit-filter: blur(2px);
+    filter: blur(2px);
+  }
+
+  //background: url(); defined back-end
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed !important;
+  overflow: hidden;
+
+  &.active //Is the wrapper fixed (as we scroll down?)
+  {
+    top: 0;
+    position: fixed;
+    z-index: 100;
+  }
+
+  & > div.profile-wrapper //this is where we put our profile picture
+  {
+    position: absolute;
+    bottom: 50px; //To account for secondary navigation bar
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+
+      p,
+      h1
+      {
+        color: white;
+        text-shadow: 0px 0px 10px rgba(0,0,0,1);
+      }
+  }
+
+  div.cover-menu-bar //Give a transparent overlay ontop of image (blurred by wrapper::after)
+  {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50px;
+      background: rgba(0, 0, 0, 0.25)
+  }
+
+  & > div.cover-menu-wrapper //This is the wrapper for the nav bar
+  {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px; //Note status height for all views
+    text-align: center;
+
+    div.triangle //We use a special triangle element to simulate dynamic menu sleection
+    {
+      position: absolute;
+      bottom: 0;
+      content: '';
+      margin-left: -10px;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid #fff;
+      transition: left .7s;
+    }
+
+    & > span //The menu items
+    {
+      cursor: pointer;
+      position: relative;
+      z-index: 10;
+      font-size: 1.3rem;
+      line-height: 50px;
+      padding-left: 10px;
+      padding-right: 10px;
+      color: white;
+      @include text-shadow();
+
+      &.active::after //The active span has a triangle
+      {
+        position: absolute;
+        bottom: 0;
+        margin-bottom: -11.5px;
+        left: 50%;
+        content: '';
+        margin-left: -10px;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 10px solid #fff;
+      }
+
+    }
+
+  }
+
+  & img.cover-profile-picture //the profile picture
+  {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+    max-width: 100px;
+    display: inline-block;
+
+    &.profile:hover //If this is the user's profile, they get to hover over it
+    {
+
+    }
+  }
 }
 
-.modal-open {
-    overflow: auto;
+@include mediaQueries()
+{
+  $profile-cover-start: 140; //Start for small displays
+  $profile-picture-start: 100; //This doesn't change
+
+  $imageSize: $profile-cover-start + ($i * 40);
+  div.profile-cover-img,
+  {
+    @if 300 >= $imageSize
+    {
+      height: 300px; //We don't go any smaller than 300px;
+    }
+    @else
+    {
+      height: unquote($imageSize + 'px');
+    }
+
+    &.active //Active when header is fixed
+    {
+      @if 300 >= $imageSize
+      {
+        margin-top: unquote('-' + (300 - 65 - 54) + 'px') //65 = what we want to see, 54 is navbar size
+      }
+      @else
+      {
+        $newMargin: ($imageSize - 65 /* height of area we want */ - 56 /*navbar*/);
+        margin-top: unquote('-' + $newMargin + 'px')
+      }
+
+    }
+  }
 }
 
-.modal-open[style] {
-    padding-right: 0px !important;
-}
+/*
+ * 0.2 Create posts box ------------------------------------------
+ */
 
+ div.create-wrapper
+ {
+   & > textarea
+   {
+     border-radius: 1rem;
 
+     &.active
+     {
+
+     }
+   }
+ }
 
 /*
     #############################################
@@ -210,12 +419,3 @@ ul.automatic_thought_list
     3.0 Create Events Section
     #############################################
 */
-
-textarea.create-box,
-input.create-box,
-select.create-box
-{
-    width: 80%;
-    margin-top:20px;
-    margin-left: 10%;
-}
