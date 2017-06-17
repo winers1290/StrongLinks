@@ -7,6 +7,8 @@
 <meta name="csrf_token" content="{{ csrf_token() }}">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
+
 <script src="https://code.jquery.com/jquery-3.1.1.min.js?v=1.0"></script>
 
 
@@ -15,8 +17,11 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
 <script src="/js/functions.js?v=1.25"></script>
-<script src="/js/scripts.js?v=1.26"></script>
 
+<script src="{{asset('/js/hammer.min.js')}}"></script>
+<script src="{{asset('/js/jquery.hammer.js')}}"></script>
+<script src="{{asset('/js/jquery.knob.min.js')}}"></script>
+<script src="/js/scripts.js?v=1.26"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
 <link rel="stylesheet" href="/css/sass/main.css?v=2.04">

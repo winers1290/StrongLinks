@@ -46,7 +46,7 @@ html, body
 {
   max-width: 100%;
   overflow-x: hidden;
-  background-color: #f5f8fa;
+  background-color: #e9ebee;
 }
 
 /* main page wrapper */
@@ -90,6 +90,24 @@ div.profile-cover-img //general wrapper
   background-repeat: no-repeat;
   background-attachment: fixed !important;
   overflow: hidden;
+
+  i.cover-photo-edit
+  {
+    position: absolute;
+    top: 78px;
+    left: 25px;
+    opacity: 0.8;
+    font-size: 3rem;
+    color: white;
+    transition: all 0.3s;
+    cursor: pointer;
+    @include text-shadow();
+
+    &:hover
+    {
+      color: black;
+    }
+  }
 
   &.active //Is the wrapper fixed (as we scroll down?)
   {
@@ -180,10 +198,18 @@ div.profile-cover-img //general wrapper
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     max-width: 100px;
     display: inline-block;
+    transition: all 0.3s;
 
-    &.profile:hover //If this is the user's profile, they get to hover over it
+    &:hover //If this is the user's profile, they get to hover over it
     {
-
+      cursor: pointer;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.19), 0 3px 3px rgba(0,0,0,0.23);
+      -webkit-filter: blur(2px);
+      filter: blur(2px);
     }
   }
 }
@@ -225,6 +251,11 @@ div.profile-cover-img //general wrapper
  * 0.2 Create posts box ------------------------------------------
  */
 
+ div.card.create-post-wrapper
+ {
+   transition: all 0.4s;
+ }
+
  div.create-wrapper
  {
    & > textarea
@@ -236,6 +267,17 @@ div.profile-cover-img //general wrapper
 
      }
    }
+ }
+
+ /*
+  * 0.3 Post Create Element ------------------------------------------
+  * This is the section of the create template that allows users to make content
+  * on the web app
+ */
+
+ textarea.form-control.post-entry
+ {
+   border: none;
  }
 
 /*

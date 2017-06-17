@@ -1,4 +1,24 @@
+//Initialize Hammer.JS
+
 $( document ).ready(function() {
+
+/* Autoexpand text areas */
+  $(document)
+      .one('focus.textarea', '.autoExpand', function(){
+          var savedValue = this.value;
+          this.value = '';
+          this.baseScrollHeight = this.scrollHeight;
+          this.value = savedValue;
+      })
+      .on('input.textarea', '.autoExpand', function(){
+          var minRows = this.getAttribute('data-min-rows')|0,
+              rows;
+          this.rows = minRows;
+          rows = Math.ceil((this.scrollHeight - this.baseScrollHeight) / 16);
+          this.rows = minRows + rows;
+      });
+
+
 
 var rangeSliders = [];
 var rangeSliderNumbers = [];
@@ -293,6 +313,10 @@ var privacyList = $('#privacy-includes');
  * Profile page Logic  ----------------------------------------
 */
 
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+
 //Listen for secondary menu clicks
 var secondaryMenuItems = $('div.cover-menu-wrapper span');
 var wrapper = $('div.cover-menu-wrapper');
@@ -338,6 +362,52 @@ $.each(secondaryMenuItems, function(){
     }
 
 
+  });
+});
+
+//Calculate width of profile emotion elements
+var emotionContainer = $('div.emotions-container');
+var emotionContainerWidth = emotionContainer.width();
+
+
+var totalWidth = emotionContainerWidth - (emotionContainer.parent().outerWidth() - emotionContainer.parent().width());
+console.log(totalWidth);
+//Grab all emotion elements
+var postEmotions = $('input.post-emotions');
+$.each(postEmotions, function(){
+  $(this).attr('data-width', (totalWidth / 5));
+  var color = $(this).css('color');
+  $(this).attr('data-fgColor', color);
+
+});
+
+//Now compile
+$(".dial").knob();
+//After compilation, hide
+emotionContainer.css('display', 'none');
+
+//Listen for focus in create text box
+var createTextArea = $('textarea[name="content"]');
+//Card Wrapper
+var cardWrapper = $('div.card.create-post-wrapper');
+createTextArea.focus(function(){
+  //Expansion width
+  var width = ((emotionContainerWidth - cardWrapper.width()) / 2);
+  //Expand
+  cardWrapper.css('margin-left', '-' + width + 'px');
+  cardWrapper.css('margin-right', '-' + width + 'px');
+
+  //Emotions slide down
+  emotionContainer.delay(300).slideDown('300', function() {
+      $(".dial").knob({'displayInput': true});
+  });
+});
+
+createTextArea.focusout(function(){
+  //Emotions slide down
+  emotionContainer.slideUp('slow', function() {
+    cardWrapper.css('margin-left', '0px');
+    cardWrapper.css('margin-right', '0px');
   });
 });
 
